@@ -1,18 +1,3 @@
-# DockerDB
-(api + postgres + pgAdmin) in Docker
+# Kursovay
+на базе Secret0-OchkA/DockerDB
 
-```
-    ┌────────┐   ┌─────────┐    ┌──────────┐   ┌─────────┐ 
-    │        │   │         │    │          │   │         │
-    │ C# WEB ├──►│ C# API  ├────┤ Postgres │◄──┤ pgAdmin │
-    │        │   │         │    │          │   │         │
-    └────────┘   └─────────┘    └──────────┘   └─────────┘
-                      ▲
- ┌───────────┐        │
- │Other users│────────┘
- └───────────┘
-```
-
-единственная проблема нужно создать sript-migration и выполнить его через pgAdmin или pgsql
-
-apiClient сгенерирован NSwagStudio
