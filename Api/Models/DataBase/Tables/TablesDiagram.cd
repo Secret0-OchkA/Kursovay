@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Tables.Department">
+    <Position X="6.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAIAAQAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Department.cs</FileName>
+      <NewMemberFileName>Class1.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tables.Expense">
+    <Position X="3.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAAAAgAAAAAAIAAAQAAAAgAAAAAAAAQAAAEA=</HashCode>
+      <FileName>Expense.cs</FileName>
+      <NewMemberFileName>Class1.cs</NewMemberFileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="department" />
+      <Property Name="employee" />
+      <Property Name="expenseType" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Tables.ExpenseType">
+    <Position X="0.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAgAAAAAAAAAQQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ExpenseType.cs</FileName>
+      <NewMemberFileName>Class1.cs</NewMemberFileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tables.Employee">
+    <Position X="6.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAgAAAAAAAAAQAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Employee.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Department" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Tables.BugetPlan">
+    <Position X="9.25" Y="3.75" Width="1.5" />
+    <Members>
+      <Property Name="April" Hidden="true" />
+      <Property Name="August" Hidden="true" />
+      <Property Name="December" Hidden="true" />
+      <Property Name="February" Hidden="true" />
+      <Property Name="January" Hidden="true" />
+      <Property Name="July" Hidden="true" />
+      <Property Name="June" Hidden="true" />
+      <Property Name="March" Hidden="true" />
+      <Property Name="May" Hidden="true" />
+      <Property Name="November" Hidden="true" />
+      <Property Name="October" Hidden="true" />
+      <Property Name="September" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AQACEgAAABRAAAAAAQAwgAAAEAAQAAAQAAAAAAAEAAA=</HashCode>
+      <FileName>BugetPlan.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Department" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Tables.Month">
+    <Position X="11.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Month.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
