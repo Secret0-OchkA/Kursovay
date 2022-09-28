@@ -12,9 +12,9 @@ namespace Kursovay.Api.Controllers
     public class ExpenseTypesController : ControllerBase
     {
         readonly ApiContext db;
-        readonly ILogger logger;
+        readonly ILogger<ExpenseTypesController> logger;
 
-        public ExpenseTypesController(ApiContext db, ILogger logger)
+        public ExpenseTypesController(ApiContext db, ILogger<ExpenseTypesController> logger)
         {
             this.db = db;
             this.logger = logger;
@@ -24,35 +24,59 @@ namespace Kursovay.Api.Controllers
         [HttpGet]
         public IEnumerable<ExpenseType> Get()
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"GET: {Request.Path}");
+            return from bp in db.expenseTypes select bp;
         }
 
         // GET api/<ExpenseTypeController>/5
         [HttpGet("{id}")]
         public ExpenseType Get(int id)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"GET: {Request.Path}");
+            ExpenseType? result = db.expenseTypes.SingleOrDefault(bp => bp.Id == id);
+
+            if (result == null) return new ExpenseType();
+
+            return result;
         }
 
         // POST api/<ExpenseTypeController>
         [HttpPost]
         public void Post([FromBody] ExpenseType value)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"POST: {Request.Path}");
+
+            db.expenseTypes.Add(value);
+            db.SaveChanges();
         }
 
         // PUT api/<ExpenseTypeController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] ExpenseType value)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"PUT: {Request.Path}");
+
+            ExpenseType? result = db.expenseTypes.SingleOrDefault(bp => bp.Id == id);
+            if (result != null)
+            {
+                result.Name = value.Name;
+                result.Description = value.Description;
+                result.Limit = value.Limit;
+
+                db.SaveChanges();
+            }
         }
 
         // DELETE api/<ExpenseTypeController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"DELET: {Request.Path}");
+
+            ExpenseType value = new ExpenseType() { Id = id };
+            db.expenseTypes.Attach(value);
+            db.expenseTypes.Remove(value);
+            db.SaveChanges();
         }
     }
 }

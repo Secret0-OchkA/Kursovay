@@ -1,18 +1,9 @@
-﻿namespace Kursovay.Tables
+﻿using System.Text.Json.Serialization;
+
+namespace Kursovay.Tables
 {
     public class Expense
     {
-
-        /* Необъединенное слияние из проекта "Tables"
-        До:
-                public int Id { get; set; }
-
-                public int ExpenseTypeId { get; set; }
-        После:
-                public int Id { get; set; }
-
-                public int ExpenseTypeId { get; set; }
-        */
         public int Id { get; set; }
 
         public int ExpenseTypeId { get; set; }
@@ -21,9 +12,11 @@
         public DateTime date { get; set; }
         public decimal amount { get; set; }
 
+        [JsonIgnore]
         public int DepartmentId { get; set; }
         public Department department { get; set; } = null!;
 
+        [JsonIgnore]
         public int EmploeeId { get; set; }
         public Employee employee { get; set; } = null!;
     }

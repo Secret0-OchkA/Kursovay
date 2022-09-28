@@ -11,47 +11,73 @@ namespace Kursovay.Api.Controllers
     public class ExpensesController : ControllerBase
     {
         readonly ApiContext db;
-        readonly ILogger logger;
+        readonly ILogger<ExpensesController> logger;
 
-        public ExpensesController(ApiContext db, ILogger logger)
+        public ExpensesController(ApiContext db, ILogger<ExpensesController> logger)
         {
             this.db = db;
             this.logger = logger;
         }
 
-        // GET: api/<ExpenseController>
+        // GET: api/<ExpensesController>
         [HttpGet]
         public IEnumerable<Expense> Get()
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"GET: {Request.Path}");
+            return from d in db.expenses select d;
         }
 
-        // GET api/<ExpenseController>/5
+        // GET api/<ExpensesController>/5
         [HttpGet("{id}")]
         public Expense Get(int id)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"GET: {Request.Path}");
+            Expense? result = db.expenses.SingleOrDefault(d => d.Id == id);
+
+            if (result == null) return new Expense();
+
+            return result;
         }
 
-        // POST api/<ExpenseController>
+        // POST api/<ExpensesController>
         [HttpPost]
         public void Post([FromBody] Expense value)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"POST: {Request.Path}");
+
+            db.expenses.Add(value);
+            db.SaveChanges();
         }
 
-        // PUT api/<ExpenseController>/5
+        // PUT api/<ExpensesController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Expense value)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"PUT: {Request.Path}");
+
+            Expense? result = db.expenses.SingleOrDefault(d => d.Id == id);
+            if (result != null)
+            {
+                result.expenseType = value.expenseType;
+                result.date = value.date;
+                result.amount = value.amount;
+                result.department = value.department;
+                result.employee = value.employee;
+
+                db.SaveChanges();
+            }
         }
 
-        // DELETE api/<ExpenseController>/5
+        // DELETE api/<ExpensesController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"DELET: {Request.Path}");
+
+            Expense value = new Expense() { Id = id };
+            db.expenses.Attach(value);
+            db.expenses.Remove(value);
+            db.SaveChanges();
         }
     }
 }

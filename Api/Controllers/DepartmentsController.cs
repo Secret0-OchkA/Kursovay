@@ -12,47 +12,71 @@ namespace Kursovay.Api.Controllers
     public class DepartmentsController : ControllerBase
     {
         readonly ApiContext db;
-        readonly ILogger logger;
+        readonly ILogger<DepartmentsController> logger;
 
-        public DepartmentsController(ApiContext db, ILogger logger)
+        public DepartmentsController(ApiContext db, ILogger<DepartmentsController> logger)
         {
             this.db = db;
             this.logger = logger;
         }
 
-        // GET: api/<DepartmentController>
+        // GET: api/<DepartmentsController>
         [HttpGet]
         public IEnumerable<Department> Get()
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"GET: {Request.Path}");
+            return from d in db.departments select d;
         }
 
-        // GET api/<DepartmentController>/5
+        // GET api/<DepartmentsController>/5
         [HttpGet("{id}")]
         public Department Get(int id)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"GET: {Request.Path}");
+            Department? result = db.departments.SingleOrDefault(d => d.Id == id);
+
+            if (result == null) return new Department();
+
+            return result;
         }
 
-        // POST api/<DepartmentController>
+        // POST api/<DepartmentsController>
         [HttpPost]
         public void Post([FromBody] Department value)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"POST: {Request.Path}");
+
+            db.departments.Add(value);
+            db.SaveChanges();
         }
 
-        // PUT api/<DepartmentController>/5
+        // PUT api/<DepartmentsController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Department value)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"PUT: {Request.Path}");
+
+            Department? result = db.departments.SingleOrDefault(d => d.Id == id);
+            if (result != null)
+            {
+                result.Name = value.Name;
+                result.employees = value.employees;
+                result.budget = value.budget;
+
+                db.SaveChanges();
+            }
         }
 
-        // DELETE api/<DepartmentController>/5
+        // DELETE api/<DepartmentsController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            logger.LogInformation($"DELET: {Request.Path}");
+
+            Department value = new Department() { Id = id };
+            db.departments.Attach(value);
+            db.departments.Remove(value);
+            db.SaveChanges();
         }
     }
 }

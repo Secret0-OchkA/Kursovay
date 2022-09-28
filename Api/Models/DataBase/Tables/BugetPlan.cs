@@ -1,20 +1,12 @@
-﻿namespace Kursovay.Tables
+﻿using System.Text.Json.Serialization;
+
+namespace Kursovay.Tables
 {
     public class BugetPlan
     {
-
-        /* Необъединенное слияние из проекта "Tables"
-        До:
-                public int Id { get; set; }
-
-                public int DeparmentId { get; set; }
-        После:
-                public int Id { get; set; }
-
-                public int DeparmentId { get; set; }
-        */
         public int Id { get; set; }
 
+        [JsonIgnore]
         public int DeparmentId { get; set; }
         public Department Department { get; set; } = null!;
 
