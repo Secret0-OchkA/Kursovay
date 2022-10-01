@@ -8,7 +8,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kursovay.Domain.EntityMapper
+namespace Domain.EntityMapper
 {
     public class ExpenseTypeMap : IEntityTypeConfiguration<ExpenseType>
     {

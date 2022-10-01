@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repository;
@@ -11,9 +12,10 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221001161933_addUserAndRole")]
+    partial class addUserAndRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,6 +42,9 @@ namespace Repository.Migrations
                         .HasColumnType("money");
 
                     b.Property<int>("DeparmentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("February")
@@ -71,6 +76,8 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DepartmentId");
+
                     b.ToTable("bugetPlans");
                 });
 
@@ -82,9 +89,6 @@ namespace Repository.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BugetPlanId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -93,9 +97,6 @@ namespace Repository.Migrations
                         .HasColumnType("money");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BugetPlanId")
-                        .IsUnique();
 
                     b.ToTable("departments");
                 });
@@ -249,15 +250,15 @@ namespace Repository.Migrations
                     b.HasDiscriminator().HasValue("Employee");
                 });
 
-            modelBuilder.Entity("Domain.Model.Department", b =>
+            modelBuilder.Entity("Domain.Model.BugetPlan", b =>
                 {
-                    b.HasOne("Domain.Model.BugetPlan", "bugetPlan")
-                        .WithOne("Department")
-                        .HasForeignKey("Domain.Model.Department", "BugetPlanId")
+                    b.HasOne("Domain.Model.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("bugetPlan");
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Domain.Model.Expense", b =>
@@ -305,12 +306,6 @@ namespace Repository.Migrations
                         .HasForeignKey("DepartmentId");
 
                     b.Navigation("Department");
-                });
-
-            modelBuilder.Entity("Domain.Model.BugetPlan", b =>
-                {
-                    b.Navigation("Department")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Model.Department", b =>

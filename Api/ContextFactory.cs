@@ -15,7 +15,9 @@ namespace DockerTestBD.Api
             string connectionStr = config.GetConnectionString("Postgres");
 
             DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseNpgsql(connectionStr);
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseNpgsql(connectionStr);
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }

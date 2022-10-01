@@ -2,13 +2,11 @@
 
 namespace Domain.Model
 {
-    public class BugetPlan
+    public class BugetPlan : BaseDbEntity
     {
-        public int Id { get; set; }
-
         [JsonIgnore]
         public int DeparmentId { get; set; }
-        public Department Department { get; set; } = null!;
+        public virtual Department Department { get; set; } = null!;
 
         public decimal January { get; set; }
         public decimal February { get; set; }

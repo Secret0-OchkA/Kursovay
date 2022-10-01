@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Kursovay.Domain.EntityMapper
+namespace Domain.EntityMapper
 {
     public class BugetPlanMap : IEntityTypeConfiguration<BugetPlan>
     {
