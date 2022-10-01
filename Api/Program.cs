@@ -1,19 +1,10 @@
-using Kursovay.DataBase;
+using DockerTestBD.Api;
 using Microsoft.EntityFrameworkCore;
+using Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<ApiContext>(options =>
-{
-    ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-    configurationBuilder.SetBasePath(Directory.GetCurrentDirectory());
-    configurationBuilder.AddJsonFile("appsettings.json");
-    IConfigurationRoot config = configurationBuilder.Build();
-
-    string connectionStr = config.GetConnectionString("Postgres");
-
-    options.UseNpgsql(connectionStr);
-});
+builder.Services.AddDbContextFactory<ApplicationDbContext, ApplicationDbContextFactory>();
 
 // Add services to the container.
 builder.Services.AddControllers();

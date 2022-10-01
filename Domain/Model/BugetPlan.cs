@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Kursovay.Tables
+namespace Domain.Model
 {
     public class BugetPlan
     {

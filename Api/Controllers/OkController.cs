@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Kursovay.Api.Controllers
+namespace DockerTestBD.Api.Controllers
 {
     /// <summary>
     /// Test connection

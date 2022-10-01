@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace DockerTestBD.Api.Migrations
+namespace Repository.Migrations
 {
-    public partial class init : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +17,7 @@ namespace DockerTestBD.Api.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    budget = table.Column<decimal>(type: "numeric", nullable: false)
+                    budget = table.Column<decimal>(type: "money", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +32,7 @@ namespace DockerTestBD.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
-                    Limit = table.Column<decimal>(type: "numeric", nullable: false)
+                    Limit = table.Column<decimal>(type: "money", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,18 +47,18 @@ namespace DockerTestBD.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     DeparmentId = table.Column<int>(type: "integer", nullable: false),
                     DepartmentId = table.Column<int>(type: "integer", nullable: false),
-                    January = table.Column<decimal>(type: "numeric", nullable: false),
-                    February = table.Column<decimal>(type: "numeric", nullable: false),
-                    March = table.Column<decimal>(type: "numeric", nullable: false),
-                    April = table.Column<decimal>(type: "numeric", nullable: false),
-                    May = table.Column<decimal>(type: "numeric", nullable: false),
-                    June = table.Column<decimal>(type: "numeric", nullable: false),
-                    July = table.Column<decimal>(type: "numeric", nullable: false),
-                    August = table.Column<decimal>(type: "numeric", nullable: false),
-                    September = table.Column<decimal>(type: "numeric", nullable: false),
-                    October = table.Column<decimal>(type: "numeric", nullable: false),
-                    November = table.Column<decimal>(type: "numeric", nullable: false),
-                    December = table.Column<decimal>(type: "numeric", nullable: false)
+                    January = table.Column<decimal>(type: "money", nullable: false),
+                    February = table.Column<decimal>(type: "money", nullable: false),
+                    March = table.Column<decimal>(type: "money", nullable: false),
+                    April = table.Column<decimal>(type: "money", nullable: false),
+                    May = table.Column<decimal>(type: "money", nullable: false),
+                    June = table.Column<decimal>(type: "money", nullable: false),
+                    July = table.Column<decimal>(type: "money", nullable: false),
+                    August = table.Column<decimal>(type: "money", nullable: false),
+                    September = table.Column<decimal>(type: "money", nullable: false),
+                    October = table.Column<decimal>(type: "money", nullable: false),
+                    November = table.Column<decimal>(type: "money", nullable: false),
+                    December = table.Column<decimal>(type: "money", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -77,7 +78,7 @@ namespace DockerTestBD.Api.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    DepartmentId = table.Column<int>(type: "integer", nullable: false)
+                    DepartmentId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -86,8 +87,7 @@ namespace DockerTestBD.Api.Migrations
                         name: "FK_employees_departments_DepartmentId",
                         column: x => x.DepartmentId,
                         principalTable: "departments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +98,7 @@ namespace DockerTestBD.Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExpenseTypeId = table.Column<int>(type: "integer", nullable: false),
                     date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    amount = table.Column<decimal>(type: "money", nullable: false),
                     DepartmentId = table.Column<int>(type: "integer", nullable: false),
                     EmploeeId = table.Column<int>(type: "integer", nullable: false),
                     employeeId = table.Column<int>(type: "integer", nullable: false)

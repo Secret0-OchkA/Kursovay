@@ -1,4 +1,4 @@
-﻿namespace Kursovay.Tables
+﻿namespace Domain.Model
 {
     public class ExpenseType
     {
