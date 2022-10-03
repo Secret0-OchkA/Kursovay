@@ -7,15 +7,22 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class EmployeeService
+    public class EmployeeService : IServiceToEntity<Employee>
     {
-        public void CreateExpense() => throw new NotImplementedException();
-        public void GetAllExpenses(Employee employee) => throw new NotImplementedException();
-        public void GetExpense() => throw new NotImplementedException();
+        public ExpenseService CreateExpense() => throw new NotImplementedException();
+
+        public IEnumerable<ExpenseService> GetExpenses() => throw new NotImplementedException();
         //if not confirm
-        public void EditExpense() => throw new NotImplementedException();
         public void DeleteExpense() => throw new NotImplementedException();
 
-        public void GetDepartmentBuget() => throw new NotImplementedException();
+
+        public void ChangeRoleEmploey() => throw new NotImplementedException();
+
+        public DepartmentService GetDepartment() => throw new NotImplementedException();
+
+        public Employee GetEntity()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
