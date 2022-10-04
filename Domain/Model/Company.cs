@@ -8,6 +8,8 @@ namespace Domain.Model
 {
     public class Company : BaseDbEntity
     {
+        public string Name { get; set; } = string.Empty;
+
         public int UserId { get; set; }
         public virtual User User { get; set; } = null!;
         

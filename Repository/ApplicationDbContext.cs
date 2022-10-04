@@ -11,6 +11,7 @@ namespace Repository
 {
     public class ApplicationDbContext : DbContext
     {
+        public DbSet<Company> companies { get; set; } = null!;
         public DbSet<Department> departments { get; set; } = null!;
         public DbSet<Employee> employees { get; set; } = null!;
         public DbSet<Expense> expenses { get; set; } = null!;
@@ -23,6 +24,7 @@ namespace Repository
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new CompanyMap());
             modelBuilder.ApplyConfiguration(new DepartmentMap());
             modelBuilder.ApplyConfiguration(new BugetPlanMap());
             modelBuilder.ApplyConfiguration(new EmployeeMap());

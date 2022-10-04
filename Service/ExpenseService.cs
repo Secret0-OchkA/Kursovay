@@ -1,4 +1,5 @@
 ﻿using Domain.Model;
+using Repository.RepositoryPattern;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +8,42 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class ExpenseService : IServiceToEntity<Expense>
+    public class ExpenseService : BaseService<Expense>
     {
-        public void ConfirmExpense() => throw new NotImplementedException();
+        public ExpenseService(IRepository<Expense> repository) : base(repository) { }
 
-        public void ValidateExpense() => throw new NotImplementedException();
-
-        public void ChangeAmmountExpense() => throw new NotImplementedException();
-
-        public void DeleteExpense() => throw new NotImplementedException();
-
-        public Expense GetEntity()
+        public void ConfirmExpense(int id)
         {
-            throw new NotImplementedException();
+            Expense expense = Get(id);
+
+            if (!expense.Valid) return;
+
+            expense.Confirm = true;
+            repository.SaveChange();
         }
+
+        public void ValidateExpense(int id)
+        {
+            Expense expense = Get(id);
+
+            expense.Valid = true;
+            repository.SaveChange();
+        }
+
+        public void ChangeAmmountExpense(int id, decimal amount)
+        {
+            Expense expense = Get(id);
+
+            if (expense.Confirm) throw new InvalidOperationException();
+
+            expense.Valid = false;
+            expense.amount = amount;
+            expense.date = DateTime.Now;
+
+            repository.SaveChange();
+        }
+
+
+        public void ChangeExpenseType() => throw new NotImplementedException();
     }
 }

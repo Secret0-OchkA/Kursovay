@@ -1,4 +1,5 @@
 ﻿using Domain.Model;
+using Repository.RepositoryPattern;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,30 +8,31 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class DepartmentService : IServiceToEntity<Department>
+    public class DepartmentService : BaseService<Department>
     {
-        public IEnumerable<EmployeeService> GetEmployees() => throw new NotImplementedException();
+        public DepartmentService(IRepository<Department> repository) : base(repository) { }
 
-        public EmployeeService AddEmployee() => throw new NotImplementedException();
-
-        public void DeleteEmloyee() => throw new NotImplementedException();
-
-
-
-        public BugetPlanService CreateBugetPlan() => throw new NotImplementedException();
-
-        public BugetPlanService GetBugetPlan() => throw new NotImplementedException();
-
-        public IEnumerable<ExpenseService> GetExpenses() => throw new NotImplementedException();
-
-
-        public decimal GetBuget() => throw new NotImplementedException();
-
-        public void EditBuget() => throw new NotImplementedException();
-
-        public Department GetEntity()
+        public void SetBuget(int id, decimal buget)
         {
-            throw new NotImplementedException();
+            Department department = Get(id);
+
+            if (buget < 0) throw new ArgumentException();
+
+            department.budget = buget;
+            repository.SaveChange();
         }
+
+
+        public void GetEmployees() => throw new NotImplementedException();
+        public void GetEmployees(int id) => throw new NotImplementedException();
+
+        public void RemoveEmployee(int id) => throw new NotImplementedException();
+        public void AddEmployee(int id, Employee employee) => throw new NotImplementedException();
+
+
+        public void CreatePlan() => throw new NotImplementedException();
+        public void DeletePlan() => throw new NotImplementedException();
+
+        public void ChangePlane() => throw new NotImplementedException();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Domain.Model;
+using Repository.RepositoryPattern;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,22 +8,17 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class EmployeeService : IServiceToEntity<Employee>
+    public class EmployeeService : BaseService<Employee>
     {
-        public ExpenseService CreateExpense() => throw new NotImplementedException();
+        public EmployeeService(IRepository<Employee> repository) : base(repository) { }
 
-        public IEnumerable<ExpenseService> GetExpenses() => throw new NotImplementedException();
-        //if not confirm
-        public void DeleteExpense() => throw new NotImplementedException();
-
-
-        public void ChangeRoleEmploey() => throw new NotImplementedException();
-
-        public DepartmentService GetDepartment() => throw new NotImplementedException();
-
-        public Employee GetEntity()
+        public void ChangeName(int id, string name)
         {
-            throw new NotImplementedException();
+            Employee employee = Get(id);
+            if (employee.Name == name) return;
+
+            employee.Name = name;
+            repository.SaveChange();
         }
     }
 }
