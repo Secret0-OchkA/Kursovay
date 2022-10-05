@@ -24,7 +24,7 @@ namespace Service.Test
         {
             string name = "testCreateCompany";
             Company company = new Company { Name = name };
-            service.CreateCompany(company);
+            //service.CreateCompany(company);
 
             Company dbCompany = dbContext.companies.Where(c => c.Name == name).Single();
 
@@ -38,7 +38,7 @@ namespace Service.Test
             dbContext.SaveChanges();
             Company company = dbContext.companies.Where(c => c.Name == name).Single();
 
-            service.DeleteCompany(company.Id);
+            //service.DeleteCompany(company.Id);
 
             Assert.Throws<InvalidOperationException>(()=>dbContext.companies.Where(c => c.Name == name).Single());
         }
@@ -46,7 +46,7 @@ namespace Service.Test
         [Test]
         public void When_NewDepartment_Should_Add()
         {
-            Company company = service.GetEntity(1);
+            //Company company = service.GetEntity(1);
         }
 
     }

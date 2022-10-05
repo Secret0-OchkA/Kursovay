@@ -13,6 +13,6 @@ namespace Domain.Model
     {
         public string Name { get; set; } = string.Empty;
 
-        public virtual List<User> users { get; set; } = new List<User>();
+        public virtual List<Employee> users { get; set; } = new List<Employee>();
     }
 }

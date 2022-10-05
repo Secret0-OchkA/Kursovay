@@ -14,6 +14,11 @@ namespace Domain.EntityMapper
     {
         public void Configure(EntityTypeBuilder<Department> builder)
         {
+            builder.HasOne(d => d.Company)
+                .WithMany(c => c.departments)
+                .HasForeignKey(d => d.CompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Property(d => d.budget).HasColumnType("money");
         }
     }

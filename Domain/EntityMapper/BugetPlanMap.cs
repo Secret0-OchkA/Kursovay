@@ -1,6 +1,12 @@
 ﻿using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Domain.EntityMapper
 {
@@ -8,6 +14,11 @@ namespace Domain.EntityMapper
     {
         public void Configure(EntityTypeBuilder<BugetPlan> builder)
         {
+            builder.HasOne(bp => bp.Department)
+                .WithOne(d => d.bugetPlan)
+                .HasForeignKey<BugetPlan>(bp => bp.DeparmentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Property(bp => bp.January).HasColumnType("money");
             builder.Property(bp => bp.February).HasColumnType("money");
             builder.Property(bp => bp.March).HasColumnType("money");

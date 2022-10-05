@@ -5,6 +5,7 @@
         public string Name { get; set; } = string.Empty;
 
         public virtual List<Employee> employees { get; set; } = new List<Employee>();
+        public virtual List<Expense> Expenses { get; set; } = new List<Expense>();
 
         public decimal budget { get; set; }
 

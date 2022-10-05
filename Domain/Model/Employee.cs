@@ -1,11 +1,21 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq.Expressions;
+using System.Text.Json.Serialization;
 
 namespace Domain.Model
 {
-    public class Employee : User
+    public class Employee : BaseDbEntity
     {
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+
+        public int RoleId { get; set; }
+        public virtual Role Role { get; set; } = new Role();
+
         [JsonIgnore]
         public int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; }
+
+        public virtual List<Expense> Expenses { get; set; } = new List<Expense>();
     }
 }
