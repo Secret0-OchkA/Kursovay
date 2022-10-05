@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service
+namespace Service.Services
 {
     public abstract class BaseService<Entity>
         where Entity : BaseDbEntity
@@ -16,7 +16,7 @@ namespace Service
         {
             this.repository = repository;
         }
-         
+
         public virtual void Create(Entity entity)
         {
             repository.Insert(entity);
@@ -30,7 +30,7 @@ namespace Service
         }
 
         public virtual Entity Get(int id)
-        { 
+        {
             Entity? entity = repository.Get(id);
             if (entity == null) throw new NullReferenceException();
 

@@ -1,12 +1,13 @@
 ﻿using Domain.Model;
 using Repository.RepositoryPattern;
+using Service.ServiceConnect;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service
+namespace Service.Services
 {
     public class ExpenseTypeService : BaseService<ExpenseType>
     {
@@ -41,5 +42,12 @@ namespace Service
             employee.Limit = limit;
             repository.SaveChange();
         }
+
+        #region Expense
+        public Expense GetExpense(int id, int expenseId, IServiceConnectRead<ExpenseType, Expense> expenseController)
+            => expenseController.Get(id, expenseId);
+        public IEnumerable<Expense> GetExpenses(int id, IServiceConnectRead<ExpenseType, Expense> expenseController)
+            => expenseController.GetAll(id);
+        #endregion
     }
 }

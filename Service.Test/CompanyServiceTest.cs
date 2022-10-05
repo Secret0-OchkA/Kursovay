@@ -1,5 +1,6 @@
 ﻿using Domain.Model;
 using Repository.RepositoryPattern;
+using Service.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,17 @@ namespace Service.Test
         public void Setup()
         {
             dbContext = new ApplicationDbContextFactory().CreateDbContext("CompanyService");
-            service = new CompanyService(new Repository<Company>(dbContext));
+            service = new CompanyService(new Repository<Department>(dbContext));
         }
 
         [Test]
         public void Should_CreateCompany()
         {
             string name = "testCreateCompany";
-            Company company = new Company { Name = name };
+            Department company = new Department { Name = name };
             //service.CreateCompany(company);
 
-            Company dbCompany = dbContext.companies.Where(c => c.Name == name).Single();
+            Department dbCompany = dbContext.companies.Where(c => c.Name == name).Single();
 
             JsonCompare.Compare(new {Name = company.Name}, new {Name = dbCompany.Name});
         }
@@ -34,9 +35,9 @@ namespace Service.Test
         public void Should_DeletCompany()
         {
             string name = "delet";
-            dbContext.Add(new Company { Name = name });
+            dbContext.Add(new Department { Name = name });
             dbContext.SaveChanges();
-            Company company = dbContext.companies.Where(c => c.Name == name).Single();
+            Department company = dbContext.companies.Where(c => c.Name == name).Single();
 
             //service.DeleteCompany(company.Id);
 

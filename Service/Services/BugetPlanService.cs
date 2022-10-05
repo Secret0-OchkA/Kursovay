@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service
+namespace Service.Services
 {
     public class BugetPlanService : BaseService<BugetPlan>
     {
@@ -35,7 +35,6 @@ namespace Service
 
             repository.Update(entity);
             repository.SaveChange();
-            
         }
     }
 

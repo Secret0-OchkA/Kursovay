@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service
+namespace Service.Services
 {
     public class ExpenseService : BaseService<Expense>
     {
@@ -43,7 +43,13 @@ namespace Service
             repository.SaveChange();
         }
 
+        public void ChangeExpenseType(int Id, ExpenseType expenseType)
+        {
+            Expense expense = Get(Id);
 
-        public void ChangeExpenseType() => throw new NotImplementedException();
+            expense.expenseType = expenseType;
+            repository.Update(expense);
+            repository.SaveChange();
+        }
     }
 }

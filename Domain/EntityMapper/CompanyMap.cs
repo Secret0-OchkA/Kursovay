@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace Domain.EntityMapper
 {
-    public class CompanyMap : IEntityTypeConfiguration<Company>
+    public class CompanyMap : IEntityTypeConfiguration<Department>
     {
-        public void Configure(EntityTypeBuilder<Company> builder) { }
+        public void Configure(EntityTypeBuilder<Department> builder) { }
     }
 }
