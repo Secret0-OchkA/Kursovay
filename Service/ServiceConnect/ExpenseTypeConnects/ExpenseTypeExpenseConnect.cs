@@ -17,8 +17,8 @@ namespace Service.ServiceConnect.ExpenseTypeConnects
             this.expenseTypeService = expenseTypeService;
         }
 
-        public Expense Get(int parentId, int chieldId)
-            => expenseTypeService.Get(parentId).Expenses.Where(ex => ex.Id == chieldId).Single();
+        public Expense Get(int parentId)
+            => expenseTypeService.Get(parentId).Expenses.FirstOrDefault(new Expense());
 
         public IEnumerable<Expense> GetAll(int parentId)
             => expenseTypeService.Get(parentId).Expenses;

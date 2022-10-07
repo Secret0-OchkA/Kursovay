@@ -41,8 +41,8 @@ namespace Service.ServiceConnect.DepartmentConnects
             employeeService.Update(employee);       
         }
 
-        public Employee Get(int parentId, int chieldId)
-            => departemtnService.Get(parentId).employees.Where(e => e.DepartmentId == chieldId).Single();
+        public Employee Get(int parentId)
+            => departemtnService.Get(parentId).employees.FirstOrDefault(new Employee());
 
         public IEnumerable<Employee> GetAll(int parentId)
             => departemtnService.Get(parentId).employees;

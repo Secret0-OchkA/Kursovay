@@ -36,7 +36,7 @@ namespace Service.ServiceConnect.DepartmentConnects
             bugetPlanService.Delete(chieldId);
         }
 
-        public BugetPlan Get(int parentId, int chieldId)
+        public BugetPlan Get(int parentId)
             => departmentService.Get(parentId).bugetPlan;
 
         public IEnumerable<BugetPlan> GetAll(int parentId)

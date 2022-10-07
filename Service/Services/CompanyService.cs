@@ -25,8 +25,6 @@ namespace Service.Services
         }
 
         #region Department
-        public Department GetDepartment(int id, int departmentId, IServiceConnectRead<Company, Department> departemtnController)
-            => departemtnController.Get(id, departmentId);
         public IEnumerable<Department> GetDepartments(int id, IServiceConnectRead<Company, Department> departemtnController)
             => departemtnController.GetAll(id);
 

@@ -24,9 +24,6 @@ namespace Service.Services
         }
 
         #region Employees
-        public Employee GetEmployee(int id, int employeeId, IServiceConnectRead<Department,Employee> employeeController)
-            => employeeController.Get(id, employeeId);
-
         public IEnumerable<Employee> GetEmployees(int id, IServiceConnectRead<Department, Employee> employeeController)
             => employeeController.GetAll(id);
 
@@ -38,21 +35,19 @@ namespace Service.Services
         #endregion
 
         #region BugetPlan
-        public BugetPlan GetBugetPlan(int id, int budgetPlanId, IServiceConnectRead<Department, BugetPlan> bugetPlanController)
-            => bugetPlanController.Get(id, budgetPlanId);
-
         public void CreatePlan(int id, BugetPlan bugetPlan, IServiceConnectAdd<Department, BugetPlan> bugetPlanController)
             => bugetPlanController.Add(id, bugetPlan);
 
         public void DeletePlan(int id, int bugetPlanId, IServiceConnectDelete<Department, BugetPlan> bugetPlanController)
             => bugetPlanController.Delete(id, bugetPlanId);
+
+        public BugetPlan GetPlan(int id, IServiceConnectRead<Department, BugetPlan> bugetPlanService)
+            => bugetPlanService.Get(id);
         #endregion
 
         #region Expense
-        public void GetExpenses(int id, IServiceConnectRead<Department, Expense> expenseController)
+        public IEnumerable<Expense> GetExpenses(int id, IServiceConnectRead<Department, Expense> expenseController)
             => expenseController.GetAll(id);
-        public void GetExpense(int id, int expenseId, IServiceConnectRead<Department, Expense> expenseController)
-            => expenseController.Get(id, expenseId);
         #endregion
     }
 }

@@ -44,8 +44,8 @@ namespace Service.ServiceConnect.EmployeeConnects
             expenseService.Delete(chieldId);
         }
 
-        public Expense Get(int parentId, int chieldId)
-            => employeeService.Get(parentId).Expenses.Where(ex => ex.Id == chieldId).Single();
+        public Expense Get(int parentId)
+            => employeeService.Get(parentId).Expenses.FirstOrDefault(new Expense());
 
         public IEnumerable<Expense> GetAll(int parentId)
             => employeeService.Get(parentId).Expenses;

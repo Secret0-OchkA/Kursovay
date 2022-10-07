@@ -42,8 +42,8 @@ namespace Service.ServiceConnect.CompanyConnects
             departemtnService.Delete(chieldId);
         }
 
-        public Department Get(int parentId, int chieldId)
-            => companyService.Get(parentId).departments.Where(d => d.Id == chieldId).Single();
+        public Department Get(int parentId)
+            => companyService.Get(parentId).departments.FirstOrDefault(new Department());
 
         public IEnumerable<Department> GetAll(int parentId)
             => companyService.Get(parentId).departments;

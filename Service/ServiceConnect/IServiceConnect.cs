@@ -15,7 +15,7 @@ namespace Service.ServiceConnect
         where ChieldType : BaseDbEntity
         where ParentType : BaseDbEntity
     {
-        ChieldType Get(int parentId, int chieldId);
+        ChieldType Get(int parentId);
         IEnumerable<ChieldType> GetAll(int parentId);
     }
     public interface IServiceConnectAdd<ParentType, ChieldType>

@@ -25,8 +25,6 @@ namespace Service.Services
         #region Expense
         public IEnumerable<Expense> GetExpenses(int id, IServiceConnectRead<Employee, Expense> expenseController)
             => expenseController.GetAll(id);
-        public Expense GetExpense(int id, int expenseId, IServiceConnectRead<Employee, Expense> expenseController)
-            => expenseController.Get(id, expenseId);
 
         public void AddExpense(int id, Expense entity, IServiceConnectAdd<Employee, Expense> expenseController)
             => expenseController.Add(id, entity);

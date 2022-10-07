@@ -44,8 +44,6 @@ namespace Service.Services
         }
 
         #region Expense
-        public Expense GetExpense(int id, int expenseId, IServiceConnectRead<ExpenseType, Expense> expenseController)
-            => expenseController.Get(id, expenseId);
         public IEnumerable<Expense> GetExpenses(int id, IServiceConnectRead<ExpenseType, Expense> expenseController)
             => expenseController.GetAll(id);
         #endregion
