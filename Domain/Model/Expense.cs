@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Domain.Model
 {
@@ -7,7 +8,9 @@ namespace Domain.Model
         public bool Confirm { get; set; } = false;
         public bool Valid { get; set; } = false;
 
+        [JsonIgnore]
         public int ExpenseTypeId { get; set; }
+        [Required]
         public virtual ExpenseType expenseType { get; set; } = null!;
 
         public DateTime date { get; set; }
@@ -15,10 +18,11 @@ namespace Domain.Model
 
         [JsonIgnore]
         public int DepartmentId { get; set; }
+        [Required]
         public virtual Department department { get; set; } = null!;
 
         [JsonIgnore]
         public int EmploeeId { get; set; }
-        public virtual Employee employee { get; set; } = null!;
+        public virtual Employee? employee { get; set; }
     }
 }

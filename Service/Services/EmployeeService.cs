@@ -42,44 +42,5 @@ namespace Service.Services
             repository.Update(employee);
             repository.SaveChange();
         }
-
-        //public void ChangeRole(int id, Role role)
-        //{
-        //    Employee employee = Get(id);
-
-        //    employee.Role = role;
-
-        //    repository.Update(employee);
-        //    repository.SaveChange();
-        //}
-
-        //public IEnumerable<Expense> GetExpenses(int id)
-        //    => Get(id).Expenses;
-        //public Expense GetExpense(int id, int expenseId)
-        //    => Get(id).Expenses.Where(ex => ex.Id == expenseId).Single();
-
-        //public void AddExpense(int id, Expense entity)
-        //{
-        //    Employee employee = Get(id);
-
-        //    if (entity.EmploeeId != 0 && entity.EmploeeId != id) throw new ArgumentException();
-
-        //    var res = from ex in employee.Expenses
-        //              where ex.Id == entity.Id
-        //              select ex;
-        //    if (res.Count() > 0) throw new ArgumentException();
-
-        //    employee.Expenses.Add(entity);
-        //    repository.Update(employee);
-        //    repository.SaveChange();
-        //}
-        //public void DeletExpense(int id, int expenseId, ExpenseService expenseService)
-        //{
-        //    Employee employee = Get(id);
-
-        //    Expense expense = employee.Expenses.Where(d => d.Id == expenseId).Single();
-
-        //    expenseService.Delete(expenseId);
-        //}
     }
 }

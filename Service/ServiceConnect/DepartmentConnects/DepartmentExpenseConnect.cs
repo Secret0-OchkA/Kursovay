@@ -11,13 +11,10 @@ namespace Service.ServiceConnect.DepartmentConnects
     internal class DepartmentExpenseConnect : IServiceConnectRead<Department, Expense>
     {
         readonly BaseService<Department> departmentService;
-        readonly BaseService<Expense> expenseService;
 
-        public DepartmentExpenseConnect(BaseService<Department> departmentService,
-            BaseService<Expense> expenseService)
+        public DepartmentExpenseConnect(BaseService<Department> departmentService)
         {
             this.departmentService = departmentService;
-            this.expenseService = expenseService;
         }
 
         public Expense Get(int parentId, int chieldId)

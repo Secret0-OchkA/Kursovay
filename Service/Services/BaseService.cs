@@ -29,6 +29,12 @@ namespace Service.Services
             repository.SaveChange();
         }
 
+        public virtual void Update(Entity entity)
+        {
+            repository.Update(entity);
+            repository.SaveChange();
+        }
+
         public virtual Entity Get(int id)
         {
             Entity? entity = repository.Get(id);

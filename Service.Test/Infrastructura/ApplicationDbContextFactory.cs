@@ -22,13 +22,6 @@ namespace Service.Test.Infrastructura
 
         public static void Initialize(ApplicationDbContext dbContext)
         {
-            Department department = new Department { Name = "departemtn1" };
-            Department company1 = new Department { Name = "Company1", departments = new List<Department> { department } };
-            dbContext.companies.AddRange(
-                company1
-                );
-
-            dbContext.SaveChanges();
         }
     }
 }

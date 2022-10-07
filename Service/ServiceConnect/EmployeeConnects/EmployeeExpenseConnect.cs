@@ -25,12 +25,23 @@ namespace Service.ServiceConnect.EmployeeConnects
 
         public void Add(int parentId, Expense entity)
         {
-            throw new NotImplementedException();
+            Employee employee = employeeService.Get(parentId);
+
+            if (employee.Department == null) throw new NullReferenceException();
+
+            entity.employee = employee;
+            entity.department = employee.Department;
+
+            expenseService.Create(entity);
         }
 
         public void Delete(int parentId, int chieldId)
         {
-            throw new NotImplementedException();
+            Expense expense = expenseService.Get(chieldId);
+
+            if (expense.Confirm) throw new OperationCanceledException();
+
+            expenseService.Delete(chieldId);
         }
 
         public Expense Get(int parentId, int chieldId)

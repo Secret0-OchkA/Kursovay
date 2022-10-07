@@ -19,6 +19,8 @@ namespace Domain.EntityMapper
                 .HasForeignKey(d => d.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.HasAlternateKey(d => new { d.Company, d.Name });
+
             builder.Property(d => d.budget).HasColumnType("money");
         }
     }

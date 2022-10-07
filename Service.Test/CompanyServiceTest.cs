@@ -17,7 +17,7 @@ namespace Service.Test
         public void Setup()
         {
             dbContext = new ApplicationDbContextFactory().CreateDbContext("CompanyService");
-            service = new CompanyService(new Repository<Department>(dbContext));
+            //service = new CompanyService(new Repository<Department>(dbContext));
         }
 
         [Test]

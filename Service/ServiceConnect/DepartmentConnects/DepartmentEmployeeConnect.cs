@@ -25,12 +25,20 @@ namespace Service.ServiceConnect.DepartmentConnects
 
         public void Add(int parentId, Employee entity)
         {
-            throw new NotImplementedException();
+            Department department = departemtnService.Get(parentId);
+
+            entity.Department = department;
+
+            employeeService.Create(entity);
         }
 
         public void Delete(int parentId, int chieldId)
         {
-            throw new NotImplementedException();
+            Employee employee = employeeService.Get(chieldId);
+
+            employee.Department = null;
+
+            employeeService.Update(employee);       
         }
 
         public Employee Get(int parentId, int chieldId)
