@@ -1,25 +1,63 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Service;
+using System.ComponentModel.Design;
 using System.Security.Policy;
 
 namespace DockerTestBD.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route(ApiRoutes.FromCompany)]
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-        public void GetDepartment() => throw new NotImplementedException();
+        readonly IService<Department> departmentService;
 
-        public void SetBuget() => throw new NotImplementedException();
+        public DepartmentController(IService<Department> departmentService)
+        {
+            this.departmentService = departmentService;
+        }
 
-        public void GetBugetPlan() => throw new NotImplementedException();
-        public void CreateBugetPlan() => throw new NotImplementedException();
-        public void DeleteBugetPlan() => throw new NotImplementedException();
+        [HttpPost]
+        public IActionResult CreateDepartment(int companyId, Department department)
+        {
+            department.CompanyId = companyId;
+            departmentService.Create(department);
 
-        public void GetEmployees() => throw new NotImplementedException();
-        public void AddEmployee()=> throw new NotImplementedException();
-        public void RemoveEmployee() => throw new NotImplementedException();
+            return Ok();
+        }
+        [HttpDelete]
+        public IActionResult DeleteDepartment(int companyId, int departmentId)
+        {
+            Department? department = departmentService.GetAll()
+               .Where(d => d.Id == departmentId && d.CompanyId == companyId)
+               .SingleOrDefault();
+            if (department == null) return BadRequest();
 
-        public void GetExpenses() => throw new NotImplementedException();
+            return Ok();
+        }
+
+        [HttpGet]
+        public IActionResult GetDepartment(int companyId)
+            => Ok(departmentService.GetAll().Where(d => d.CompanyId == companyId));
+        [HttpGet("{departmentId}")]
+        public IActionResult GetDepartment(int companyId, int departmentId)
+        {
+            Department? department = departmentService.Get(departmentId);
+            if (department == null || department.CompanyId != companyId) return BadRequest(new Department());
+
+            return Ok(department);
+        }
+        [HttpPut("{departmentId}")]
+        public IActionResult SetBuget(int departmentId, decimal buget)
+        {
+            Department? department = departmentService.Get(departmentId);
+            if (department == null) return BadRequest(new Department());
+
+            department.budget = buget;
+            departmentService.Update(department);
+
+            return Ok(department);
+        }
     }
 }

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Service
 {
-    public abstract class BaseService<Entity>
+    public abstract class BaseService<Entity> : IService<Entity>
         where Entity : BaseDbEntity
     {
         protected readonly IRepository<Entity> repository;
@@ -22,25 +22,24 @@ namespace Service.Services
             repository.Insert(entity);
             repository.SaveChange();
         }
-
         public virtual void Delete(int id)
         {
             repository.Delete(id);
             repository.SaveChange();
         }
-
         public virtual void Update(Entity entity)
         {
             repository.Update(entity);
             repository.SaveChange();
         }
 
-        public virtual Entity Get(int id)
+        public virtual Entity? Get(int id)
         {
-            Entity? entity = repository.Get(id);
-            if (entity == null) throw new NullReferenceException();
-
-            return entity;
+            return repository.Get(id);
+        }
+        public virtual IEnumerable<Entity> GetAll()
+        {
+            return repository.GetAll();
         }
     }
 }
