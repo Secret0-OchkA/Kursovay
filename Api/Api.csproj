@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Repository\Repository.csproj" />
+    <ProjectReference Include="..\Repository\Queryable.csproj" />
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
 

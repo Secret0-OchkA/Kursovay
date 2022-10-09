@@ -1,12 +1,6 @@
 ﻿using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Domain.EntityMapper
 {
@@ -19,7 +13,7 @@ namespace Domain.EntityMapper
                 .HasForeignKey(d => d.CompanyId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasAlternateKey(d => new { d.Company, d.Name });
+            builder.HasAlternateKey(d => new { d.CompanyId, d.Name });
 
             builder.Property(d => d.budget).HasColumnType("money");
         }

@@ -1,6 +1,5 @@
 ﻿using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Framework;
 using Service;
 
 namespace DockerTestBD.Api.Controllers

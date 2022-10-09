@@ -9,5 +9,10 @@
         public decimal Limit { get; set; }
 
         public virtual List<Expense> Expenses { get; set; } = new List<Expense>();
+
+        //[JsonIgnore]
+        public int CompanyId { get; set; }
+        //[Required]
+        public virtual Company Company { get; set; } = null!;
     }
 }

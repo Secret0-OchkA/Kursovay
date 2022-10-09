@@ -1,17 +1,12 @@
 ﻿using Domain.EntityMapper;
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Department> companies { get; set; } = null!;
+        public DbSet<Company> companies { get; set; } = null!;
         public DbSet<Department> departments { get; set; } = null!;
         public DbSet<Employee> employees { get; set; } = null!;
         public DbSet<Expense> expenses { get; set; } = null!;

@@ -1,11 +1,10 @@
 ﻿using Domain.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 
 namespace DockerTestBD.Api.Controllers
 {
-    [Route(ApiRoute.baseRoute + 
+    [Route(ApiRoute.baseRoute +
         ApiRoute.Employee + ApiRoute.FromEmployee +
         ApiRoute.controller)]
     [ApiController]

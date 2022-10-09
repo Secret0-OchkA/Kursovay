@@ -1,14 +1,13 @@
 using DockerTestBD.Api;
-using Microsoft.EntityFrameworkCore;
 using Repository;
-using Repository.RepositoryPattern;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContextFactory<ApplicationDbContext, ApplicationDbContextFactory>();
 
 // Add services to the container.
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

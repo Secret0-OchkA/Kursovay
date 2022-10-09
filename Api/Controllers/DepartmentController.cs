@@ -1,9 +1,6 @@
 ﻿using Domain.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service;
-using System.ComponentModel.Design;
-using System.Security.Policy;
 
 namespace DockerTestBD.Api.Controllers
 {

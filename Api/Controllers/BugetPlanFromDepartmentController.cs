@@ -1,5 +1,4 @@
 ﻿using Domain.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service;
 
@@ -8,7 +7,7 @@ namespace DockerTestBD.Api.Controllers
     [Route(ApiRoute.baseRoute +
         ApiRoute.Company +
         ApiRoute.FromCompany +
-        ApiRoute.Deparment + 
+        ApiRoute.Deparment +
         ApiRoute.FromDepartment +
         ApiRoute.controller)]
     [ApiController]

@@ -1,7 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System.Text;
-
-namespace DockerTestBD.Api
+﻿namespace DockerTestBD.Api
 {
     static class ApiRoute//пока ничего лучше не придумал хотел fluent builder
     {
