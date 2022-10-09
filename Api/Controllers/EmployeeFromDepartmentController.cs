@@ -5,8 +5,11 @@ using Service;
 
 namespace DockerTestBD.Api.Controllers
 {
-    [Route(ApiRoutes.FromDepartment)]
-    [ApiController]
+    [Route(ApiRoute.baseRoute +
+        ApiRoute.Company + ApiRoute.FromCompany +
+        ApiRoute.Deparment + ApiRoute.FromDepartment +
+        ApiRoute.controller)]
+    [ApiController()]
     public class EmployeeFromDepartmentController : ControllerBase
     {
         readonly IService<Employee> service;

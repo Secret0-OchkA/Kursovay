@@ -5,7 +5,12 @@ using Service;
 
 namespace DockerTestBD.Api.Controllers
 {
-    [Route(ApiRoutes.FromDepartment)]
+    [Route(ApiRoute.baseRoute +
+        ApiRoute.Company +
+        ApiRoute.FromCompany +
+        ApiRoute.Deparment + 
+        ApiRoute.FromDepartment +
+        ApiRoute.controller)]
     [ApiController]
     public class BugetPlanController : ControllerBase
     {

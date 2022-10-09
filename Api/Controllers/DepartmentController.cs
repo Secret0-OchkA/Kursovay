@@ -7,7 +7,10 @@ using System.Security.Policy;
 
 namespace DockerTestBD.Api.Controllers
 {
-    [Route(ApiRoutes.FromCompany)]
+    [Route(ApiRoute.baseRoute +
+        ApiRoute.Company +
+        ApiRoute.FromCompany +
+        ApiRoute.controller)]
     [ApiController]
     public class DepartmentController : ControllerBase
     {

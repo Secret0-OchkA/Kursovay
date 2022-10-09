@@ -5,7 +5,8 @@ using Service;
 
 namespace DockerTestBD.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route(ApiRoute.baseRoute +
+        ApiRoute.controller)]
     [ApiController]
     public class CompanyController : ControllerBase
     {

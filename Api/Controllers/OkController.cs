@@ -5,7 +5,7 @@ namespace DockerTestBD.Api.Controllers
     /// <summary>
     /// Test connection
     /// </summary>
-    [Route("api/[controller]")]
+    [Route(ApiRoute.baseRoute + ApiRoute.controller)]
     [ApiController]
     public class OkController : ControllerBase
     {
