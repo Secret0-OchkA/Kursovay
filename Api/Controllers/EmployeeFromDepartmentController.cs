@@ -1,6 +1,8 @@
-﻿using Domain.Model;
+﻿using Context;
+using Context.Queryable;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -11,21 +13,24 @@ namespace DockerTestBD.Api.Controllers
     [ApiController()]
     public class EmployeeFromDepartmentController : ControllerBase
     {
-        readonly IService<Employee> service;
-        public EmployeeFromDepartmentController(IService<Employee> service)
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<Employee> employees;
+        readonly DbSet<Department> departments;
+        public EmployeeFromDepartmentController(ApplicationDbContext dbContext)
         {
-            this.service = service;
+            this.dbContext = dbContext;
+            employees = dbContext.employees;
+            departments = dbContext.departments;
         }
 
         [HttpGet]
         public IActionResult GetEmployee(int companyId, int departmentId)
-            => Ok(service.GetAll().Where(e => e.Department?.CompanyId == companyId && e.DepartmentId == departmentId));
+            => Ok(employees.ByCompany(companyId).ByDepartment(departmentId).ToList());
         [HttpGet("{employeeId}")]
         public IActionResult GetEmployee(int companyId, int departmentId, int employeeId)
         {
-            Employee? employee = service.Get(employeeId);
-            if (employee == null || employee.Department?.CompanyId != companyId || employee.DepartmentId != departmentId)
-                return BadRequest(new Employee());
+            Employee? employee = employees.ByCompany(companyId).ByDepartment(departmentId).GetObj(employeeId);
+            if (employee == null) return BadRequest(new Employee());
 
             return Ok(employee);
         }
@@ -33,24 +38,40 @@ namespace DockerTestBD.Api.Controllers
         [HttpDelete("{employeeId}")]
         public IActionResult Remove(int companyId, int departmentId, int employeeId)
         {
-            Employee? employee = service.Get(employeeId);
-            if (employee == null || employee.Department?.CompanyId != companyId || employee.DepartmentId != departmentId)
+            Employee? employee = employees
+                .ByCompany(companyId)
+                .ByDepartment(departmentId)
+                .GetObj(employeeId);
+            Department? department = departments.ByCompany(companyId).GetObj(departmentId);
+            if (employee == null || department == null)
                 return BadRequest(new Employee());
 
-            employee.Department = null;
-            service.Update(employee);
+            if (!department.employees.Contains(employee))
+                return BadRequest();
+
+            department.employees.Remove(employee);
+
+            departments.Update(department);
+            dbContext.SaveChanges();
+
             return Ok(employee);
         }
         [HttpPost("{employeeId}")]
-        public IActionResult Add(int departmentId, int employeeId)
+        public IActionResult Add(int companyId, int departmentId, int employeeId)
         {
-            Employee? employee = service.Get(employeeId);
-            if (employee == null)
+            Employee? employee = employees.GetObj(employeeId);
+            Department? department = departments.ByCompany(companyId).GetObj(departmentId);
+            if (employee == null || department == null)
                 return BadRequest(new Employee());
 
-            employee.DepartmentId = departmentId;
-            service.Update(employee);
-            return Ok(service.Get(employeeId));
+            if (department.employees.Contains(employee))
+                return BadRequest();
+
+            department.employees.Add(employee);
+
+            departments.Update(department);
+            dbContext.SaveChanges();
+            return Ok();
         }
     }
 }

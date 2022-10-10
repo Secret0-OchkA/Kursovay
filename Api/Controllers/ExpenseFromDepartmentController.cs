@@ -1,6 +1,8 @@
-﻿using Domain.Model;
+﻿using Context;
+using Context.Queryable;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -11,26 +13,22 @@ namespace DockerTestBD.Api.Controllers
     [ApiController()]
     public class ExpenseFromDepartmentController : ControllerBase
     {
-        readonly IService<Expense> service;
-        public ExpenseFromDepartmentController(IService<Expense> service)
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<Expense> expenses;
+        public ExpenseFromDepartmentController(ApplicationDbContext dbContext)
         {
-            this.service = service;
+            this.dbContext = dbContext;
+            expenses = dbContext.expenses;
         }
 
         [HttpGet]
-        public IActionResult Get(int departmentId)
-        {
-            List<Expense> expenses = service.GetAll()
-                .Where(ex => ex.DepartmentId == departmentId)
-                .ToList();
-            return Ok(expenses);
-        }
+        public IActionResult Get(int companyId, int departmentId)
+            => Ok(expenses.ByCompany(companyId).ByDepartment(departmentId).ToList());
         [HttpGet("{expenseId}")]
-        public IActionResult Get(int departmentId, int expenseId)
+        public IActionResult Get(int companyId, int departmentId, int expenseId)
         {
-            Expense? expense = service.Get(expenseId);
+            Expense? expense = expenses.ByCompany(companyId).ByDepartment(departmentId).GetObj(expenseId);
             if (expense == null) return BadRequest(new Expense());
-            if (expense.DepartmentId != departmentId) return BadRequest(new Expense());
 
             return Ok(expense);
         }

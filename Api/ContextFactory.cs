@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Repository;
+﻿using Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerTestBD.Api
 {

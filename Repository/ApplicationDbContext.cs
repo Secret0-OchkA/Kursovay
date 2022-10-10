@@ -2,7 +2,7 @@
 using Domain.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace Repository
+namespace Context
 {
     public class ApplicationDbContext : DbContext
     {
@@ -15,6 +15,11 @@ namespace Repository
         public DbSet<Role> roles { get; set; } = null!;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

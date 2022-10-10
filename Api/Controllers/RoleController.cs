@@ -1,6 +1,9 @@
-﻿using Domain.Model;
+﻿using Context;
+using Context.Queryable;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -8,19 +11,21 @@ namespace DockerTestBD.Api.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
-        readonly IService<Role> service;
-        public RoleController(IService<Role> service)
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<Role> roles;
+        public RoleController(ApplicationDbContext dbContext)
         {
-            this.service = service;
+            this.dbContext = dbContext;
+            roles = dbContext.roles;
         }
 
         [HttpGet]
         public IActionResult Get()
-            => Ok(service.GetAll());
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+            => Ok(roles.ToList());
+        [HttpGet("{roleId}")]
+        public IActionResult Get(int roleId)
         {
-            Role? role = service.Get(id);
+            Role? role = roles.GetObj(roleId);
             if (role == null) return BadRequest(new Role());
             return Ok(role);
         }

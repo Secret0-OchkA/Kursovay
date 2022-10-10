@@ -21,8 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\Repository\Queryable.csproj" />
-    <ProjectReference Include="..\Service\Service.csproj" />
+    <ProjectReference Include="..\Repository\Context.csproj" />
   </ItemGroup>
 
 </Project>

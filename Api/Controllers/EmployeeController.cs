@@ -1,6 +1,8 @@
-﻿using Domain.Model;
+﻿using Context;
+using Context.Queryable;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -9,33 +11,36 @@ namespace DockerTestBD.Api.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        readonly IService<Employee> service;
-        public EmployeeController(IService<Employee> service)
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<Employee> employees;
+        public EmployeeController(ApplicationDbContext dbContext)
         {
-            this.service = service;
+            this.dbContext = dbContext;
+            employees = dbContext.employees;
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            Employee? employee = service.Get(id);
+            Employee? employee = employees.GetObj(id);
             if (employee == null) return BadRequest(new Employee());
 
             return Ok(employee);
         }
         [HttpGet]
         public IActionResult GetAll()
-            => Ok(service.GetAll());
+            => Ok(employees.ToList());
         [HttpPost]
         public IActionResult Create(Employee employee)
         {
-            service.Create(employee);
+            employees.Add(employee);
+            dbContext.SaveChanges();
             return Ok();
         }
         [HttpDelete]
         public IActionResult Delete(int id)
         {
-            Employee? employee = service.Get(id);
+            Employee? employee = employees.GetObj(id);
             if (employee == null) return BadRequest();
 
             return Ok();

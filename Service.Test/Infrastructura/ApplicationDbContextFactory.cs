@@ -1,4 +1,6 @@
-﻿namespace Service.Test.Infrastructura
+﻿using Context;
+
+namespace Service.Test.Infrastructura
 {
     internal class ApplicationDbContextFactory
     {

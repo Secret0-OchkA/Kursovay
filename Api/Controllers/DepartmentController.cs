@@ -1,6 +1,8 @@
-﻿using Domain.Model;
+﻿using Context;
+using Context.Queryable;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -11,52 +13,61 @@ namespace DockerTestBD.Api.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
-        readonly IService<Department> departmentService;
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<Department> departments;
 
-        public DepartmentController(IService<Department> departmentService)
+        public DepartmentController(ApplicationDbContext dbContext)
         {
-            this.departmentService = departmentService;
+            this.dbContext = dbContext;
+            departments = dbContext.departments;
         }
 
         [HttpPost]
         public IActionResult CreateDepartment(int companyId, Department department)
         {
             department.CompanyId = companyId;
-            departmentService.Create(department);
+
+            departments.Add(department);
+            dbContext.SaveChanges();
 
             return Ok();
         }
         [HttpDelete]
         public IActionResult DeleteDepartment(int companyId, int departmentId)
         {
-            Department? department = departmentService.GetAll()
-               .Where(d => d.Id == departmentId && d.CompanyId == companyId)
-               .SingleOrDefault();
+            Department? department = departments
+                .ByCompany(companyId)
+                .GetObj(departmentId);
             if (department == null) return BadRequest();
 
+            departments.Remove(department);
+            dbContext.SaveChanges();
             return Ok();
         }
 
         [HttpGet]
         public IActionResult GetDepartment(int companyId)
-            => Ok(departmentService.GetAll().Where(d => d.CompanyId == companyId));
+            => Ok(departments.ByCompany(companyId));
+
         [HttpGet("{departmentId}")]
         public IActionResult GetDepartment(int companyId, int departmentId)
         {
-            Department? department = departmentService.Get(departmentId);
-            if (department == null || department.CompanyId != companyId) return BadRequest(new Department());
+            Department? department = departments
+                .ByCompany(companyId)
+                .GetObj(departmentId);
+            if (department == null) return BadRequest(new Department());
 
             return Ok(department);
         }
         [HttpPut("{departmentId}")]
         public IActionResult SetBuget(int departmentId, decimal buget)
         {
-            Department? department = departmentService.Get(departmentId);
+            Department? department = departments.GetObj(departmentId);
             if (department == null) return BadRequest(new Department());
 
             department.budget = buget;
-            departmentService.Update(department);
-
+            departments.Update(department);
+            dbContext.SaveChanges();
             return Ok(department);
         }
     }

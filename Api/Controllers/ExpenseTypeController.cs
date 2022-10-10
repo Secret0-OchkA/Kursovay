@@ -1,6 +1,8 @@
-﻿using Domain.Model;
+﻿using Context;
+using Context.Queryable;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -10,20 +12,22 @@ namespace DockerTestBD.Api.Controllers
     [ApiController]
     public class ExpenseTypeController : ControllerBase
     {
-        readonly IService<ExpenseType> service;
-        public ExpenseTypeController(IService<ExpenseType> service)
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<ExpenseType> expenseTypes;
+        public ExpenseTypeController(ApplicationDbContext dbContext)
         {
-            this.service = service;
+            this.dbContext = dbContext;
+            expenseTypes = dbContext.expenseTypes;
         }
 
         [HttpGet]
         public IActionResult Get(int companyId)
-            => Ok(service.GetAll().Where(ext => ext.CompanyId == companyId));
-        [HttpGet("{id}")]
-        public IActionResult Get(int companyId, int id)
+            => Ok(expenseTypes.ByCompany(companyId).ToList());
+        [HttpGet("{expenseTypeId}")]
+        public IActionResult Get(int companyId, int expenseTypeId)
         {
-            ExpenseType? expenseType = service.Get(id);
-            if (expenseType == null || expenseType.CompanyId != companyId)
+            ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
+            if (expenseType == null)
                 return BadRequest(new ExpenseType());
             return Ok(expenseType);
         }
@@ -31,33 +35,34 @@ namespace DockerTestBD.Api.Controllers
         public IActionResult Post(int companyId, ExpenseType expenseType)
         {
             expenseType.CompanyId = companyId;
-            service.Create(expenseType);
+            expenseTypes.Add(expenseType);
+            dbContext.SaveChanges();
             return Ok();
         }
-        [HttpDelete("{id}")]
-        public IActionResult Delet(int companyId, int id)
+        [HttpDelete("{expenseTypeId}")]
+        public IActionResult Delet(int companyId, int expenseTypeId)
         {
-            ExpenseType? expenseType = service.Get(id);
+            ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
 
-            if (expenseType == null || expenseType.CompanyId != companyId)
+            if (expenseType == null)
                 return BadRequest();
 
-            service.Delete(id);
-
+            expenseTypes.Remove(expenseType);
+            dbContext.SaveChanges();
             return Ok();
         }
 
         [HttpPut]
-        public IActionResult Update(int companyId, int id, ExpenseType entity)
+        public IActionResult Update(int companyId, ExpenseType entity)
         {
-            if (entity.CompanyId != companyId || entity.Id != id)
+            if (entity.CompanyId != companyId)
                 return BadRequest(new ExpenseType());
 
             if (entity.Limit <= 0) return BadRequest(new ExpenseType());
 
-            service.Update(entity);
-
-            return Ok(service.Get(id));
+            expenseTypes.Update(entity);
+            dbContext.SaveChanges();
+            return Ok();
         }
     }
 }

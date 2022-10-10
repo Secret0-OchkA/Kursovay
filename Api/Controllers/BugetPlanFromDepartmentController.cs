@@ -1,6 +1,8 @@
-﻿using Domain.Model;
+﻿using Context;
+using Context.Queryable;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -13,32 +15,44 @@ namespace DockerTestBD.Api.Controllers
     [ApiController]
     public class BugetPlanController : ControllerBase
     {
-        readonly IService<BugetPlan> service;
-        public BugetPlanController(IService<BugetPlan> service)
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<BugetPlan> bugetPlans;
+        public BugetPlanController(ApplicationDbContext dbContext)
         {
-            this.service = service;
+            this.dbContext = dbContext;
+            bugetPlans = dbContext.bugetPlans;
         }
 
         [HttpPost]
         public IActionResult Create(int departmentId, BugetPlan bugetPlan)
         {
             bugetPlan.DeparmentId = departmentId;
-            service.Create(bugetPlan);
+            bugetPlans.Add(bugetPlan);
+            dbContext.SaveChanges();
             return Ok();
         }
 
         [HttpDelete("{bugetPlanId}")]
         public IActionResult Delete(int departmentId, int bugetPlanId)
         {
-            service.Delete(bugetPlanId);
+            BugetPlan? bp = bugetPlans.ByDepartment(departmentId).GetObj(bugetPlanId);
+
+            if (bp == null) return BadRequest();
+
+            bugetPlans.Remove(bp);
+            dbContext.SaveChanges();
             return Ok();
         }
 
         [HttpGet("{bugetPlanId}")]
         public IActionResult GetBugetPlan(int companyId, int departmentId, int bugetPlanId)
         {
-            BugetPlan? bp = service.Get(bugetPlanId);
-            if (bp == null || bp.DeparmentId != departmentId || bp.Department.CompanyId != companyId)
+            BugetPlan? bp = bugetPlans
+                .ByCompany(companyId)
+                .ByDepartment(departmentId)
+                .GetObj(bugetPlanId);
+
+            if (bp == null)
                 return BadRequest(new BugetPlan());
 
             return Ok(bp);
@@ -47,8 +61,12 @@ namespace DockerTestBD.Api.Controllers
         [HttpPut("{bugetPlanId}")]
         public IActionResult SetMonthBuget(int companyId, int departmentId, int bugetPlanId, [FromQuery] Month month, [FromQuery] decimal amount)
         {
-            BugetPlan? bp = service.Get(bugetPlanId);
-            if (bp == null || bp.DeparmentId != departmentId || bp.Department.CompanyId != companyId)
+            BugetPlan? bp = bugetPlans
+               .ByCompany(companyId)
+               .ByDepartment(departmentId)
+               .GetObj(bugetPlanId);
+
+            if (bp == null)
                 return BadRequest(new BugetPlan());
 
             switch (month)
@@ -67,7 +85,8 @@ namespace DockerTestBD.Api.Controllers
                 case Month.December: bp.December = amount; break;
             }
 
-            service.Update(bp);
+            bugetPlans.Update(bp);
+            dbContext.SaveChanges();
             return Ok(bp);
         }
 

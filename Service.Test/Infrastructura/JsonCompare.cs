@@ -8,6 +8,8 @@ namespace Service.Test.Infrastructura
         {
             string expectStr = JsonConvert.SerializeObject(expect);
             string actualStr = JsonConvert.SerializeObject(actual);
+            Assert.NotNull(expect);
+            Assert.NotNull(actual);
             Assert.AreEqual(expectStr, actualStr);
         }
     }

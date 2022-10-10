@@ -1,6 +1,8 @@
-﻿using Domain.Model;
+﻿using Context;
+using Context.Queryable;
+using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
-using Service;
+using Microsoft.EntityFrameworkCore;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -9,20 +11,22 @@ namespace DockerTestBD.Api.Controllers
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        readonly IService<Company> companyService;
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<Company> companies;
 
-        public CompanyController(IService<Company> companyService)
+        public CompanyController(ApplicationDbContext dbContext)
         {
-            this.companyService = companyService;
+            this.dbContext = dbContext;
+            companies = dbContext.companies;
         }
 
         [HttpGet]
         public IActionResult GetCompany()
-            => Ok(companyService.GetAll().ToList());
+            => Ok(companies.ToList());
         [HttpGet("{id}")]
         public IActionResult GetCompany(int id)
         {
-            Company? company = companyService.Get(id);
+            Company? company = companies.GetObj(id);
 
             if (company == null) return BadRequest(new Company());
 
@@ -32,27 +36,32 @@ namespace DockerTestBD.Api.Controllers
         [HttpPost]
         public IActionResult CreateCompany([FromBody] Company company)
         {
-            companyService.Create(company);
+            companies.Add(company);
+            dbContext.SaveChanges();
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeletCompnay(int id)
         {
-            companyService.Delete(id);
+            Company? company = companies.GetObj(id);
+            if (company == null) return BadRequest();
+
+            companies.Remove(company);
+            dbContext.SaveChanges();
             return Ok();
         }
 
         [HttpPut("{id}/{name}")]
         public IActionResult ChangeName(int id, string name)
         {
-            Company? company = companyService.Get(id);
+            Company? company = companies.GetObj(id);
 
             if (company == null) return BadRequest(new Company());
 
             company.Name = name;
-            companyService.Update(company);
-
+            companies.Update(company);
+            dbContext.SaveChanges();
             return Ok(company);
         }
     }
