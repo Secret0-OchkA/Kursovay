@@ -1,10 +1,13 @@
-﻿namespace Domain.Model
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace Domain.Model
 {
     public class BugetPlan : BaseDbEntity
     {
-        //[JsonIgnore]
+        [JsonIgnore]
         public int DeparmentId { get; set; }
-        //[Required]
+        [Required]
         public virtual Department Department { get; set; } = null!;
 
         public decimal January { get; set; }

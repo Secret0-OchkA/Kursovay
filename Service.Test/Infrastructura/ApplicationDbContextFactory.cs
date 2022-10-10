@@ -1,22 +1,23 @@
-﻿using Context;
+﻿using Api.Test.Infrastructura;
+using Context;
 
 namespace Service.Test.Infrastructura
 {
     internal class ApplicationDbContextFactory
     {
-        public ApplicationDbContext CreateDbContext(string databaseName)
+        public ApplicationDbContextTest CreateDbContext(string databaseName)
         {
-            DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            DbContextOptionsBuilder<ApplicationDbContextTest> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContextTest>();
             optionsBuilder
                 .UseLazyLoadingProxies()
                 .UseInMemoryDatabase(databaseName);
 
-            ApplicationDbContext dbContext = new ApplicationDbContext(optionsBuilder.Options);
+            ApplicationDbContextTest dbContext = new ApplicationDbContextTest(optionsBuilder.Options);
             Initialize(dbContext);
             return dbContext;
         }
 
-        public static void Initialize(ApplicationDbContext dbContext)
+        public static void Initialize(ApplicationDbContextTest dbContext)
         {
 
             dbContext.SaveChanges();

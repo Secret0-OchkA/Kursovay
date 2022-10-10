@@ -1,4 +1,7 @@
-﻿namespace Domain.Model
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace Domain.Model
 {
     public class Employee : BaseDbEntity
     {
@@ -6,12 +9,12 @@
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public int RoleId { get; set; }
-        //[Required]
+        [Required]
         public virtual Role Role { get; set; } = null!;
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; }
 

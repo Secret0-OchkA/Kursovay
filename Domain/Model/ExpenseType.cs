@@ -1,4 +1,7 @@
-﻿namespace Domain.Model
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace Domain.Model
 {
     public class ExpenseType : BaseDbEntity
     {
@@ -10,9 +13,9 @@
 
         public virtual List<Expense> Expenses { get; set; } = new List<Expense>();
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public int CompanyId { get; set; }
-        //[Required]
+        [Required]
         public virtual Company Company { get; set; } = null!;
     }
 }
