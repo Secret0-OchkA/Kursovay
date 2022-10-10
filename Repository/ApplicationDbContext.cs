@@ -15,10 +15,15 @@ namespace Context
         public DbSet<Role> roles { get; set; } = null!;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseNpgsql(
+                "Host=localhost;Port=5432;Database=dockerApiDb;Username=postgres;Password=secretochka2442");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
