@@ -1,6 +1,7 @@
 ﻿using Context;
 using Context.Queryable;
 using Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,16 +24,23 @@ namespace DockerTestBD.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "owner")]
         public IActionResult CreateDepartment(int companyId, Department department)
         {
-            department.CompanyId = companyId;
+            Department newDepartment = new Department
+            {
+                CompanyId = companyId,
+                Name = department.Name,
+                budget = department.budget,
+            };
 
-            departments.Add(department);
+            departments.Add(newDepartment);
             dbContext.SaveChanges();
 
             return Ok();
         }
         [HttpDelete]
+        [Authorize(Roles = "owner")]
         public IActionResult DeleteDepartment(int companyId, int departmentId)
         {
             Department? department = departments
@@ -46,10 +54,12 @@ namespace DockerTestBD.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "owner,accountant")]
         public IActionResult GetDepartment(int companyId)
             => Ok(departments.ByCompany(companyId));
 
         [HttpGet("{departmentId}")]
+        [Authorize(Roles = "owner,accountant")]
         public IActionResult GetDepartment(int companyId, int departmentId)
         {
             Department? department = departments
@@ -60,6 +70,7 @@ namespace DockerTestBD.Api.Controllers
             return Ok(department);
         }
         [HttpPut("{departmentId}")]
+        [Authorize(Roles = "owner")]
         public IActionResult SetBuget(int departmentId, decimal buget)
         {
             Department? department = departments.GetObj(departmentId);

@@ -1,6 +1,7 @@
 ﻿using Context;
 using Context.Queryable;
 using Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace DockerTestBD.Api.Controllers
     [Route(ApiRoute.baseRoute +
         ApiRoute.controller)]
     [ApiController]
+    [Authorize]
     public class EmployeeController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;
@@ -30,21 +32,15 @@ namespace DockerTestBD.Api.Controllers
         [HttpGet]
         public IActionResult GetAll()
             => Ok(employees.ToList());
-        [HttpPost]
-        public IActionResult Create(Employee employee)
-        {
-            employees.Add(employee);
-            dbContext.SaveChanges();
-            return Ok();
-        }
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            Employee? employee = employees.GetObj(id);
-            if (employee == null) return BadRequest();
 
-            return Ok();
-        }
+        //[HttpDelete]
+        //public IActionResult Delete(int id)
+        //{
+        //    Employee? employee = employees.GetObj(id);
+        //    if (employee == null) return BadRequest();
+
+        //    return Ok();
+        //}
         //TODO: UpdateMethods
     }
 }

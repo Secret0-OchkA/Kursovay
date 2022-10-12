@@ -7,7 +7,7 @@ namespace Service.Test.Infrastructura
     {
         public ApplicationDbContextTest CreateDbContext(string databaseName)
         {
-            DbContextOptionsBuilder<ApplicationDbContextTest> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContextTest>();
+            DbContextOptionsBuilder<ApplicationDbContext> optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder
                 .UseLazyLoadingProxies()
                 .UseInMemoryDatabase(databaseName);

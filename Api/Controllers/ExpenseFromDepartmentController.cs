@@ -1,6 +1,7 @@
 ﻿using Context;
 using Context.Queryable;
 using Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +11,8 @@ namespace DockerTestBD.Api.Controllers
         ApiRoute.Company + ApiRoute.FromCompany +
         ApiRoute.Deparment + ApiRoute.FromDepartment +
         ApiRoute.controller)]
-    [ApiController()]
+    [ApiController]
+    [Authorize(Roles = "owner,accountant")]
     public class ExpenseFromDepartmentController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;

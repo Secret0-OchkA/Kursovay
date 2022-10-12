@@ -1,6 +1,7 @@
 ﻿using Context;
 using Context.Queryable;
 using Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,10 +21,27 @@ namespace DockerTestBD.Api.Controllers
             expenseTypes = dbContext.expenseTypes;
         }
 
+        [HttpPost]
+        [Authorize(Roles = "owner")]
+        public IActionResult Post(int companyId, ExpenseType expenseType)
+        {
+            ExpenseType newExpenseType = new ExpenseType
+            {
+                Name = expenseType.Name,
+                Description = expenseType.Description,
+                Limit = expenseType.Limit,
+                CompanyId = companyId
+            };
+            expenseTypes.Add(newExpenseType);
+            dbContext.SaveChanges();
+            return Ok();
+        }
         [HttpGet]
+        [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId)
             => Ok(expenseTypes.ByCompany(companyId).ToList());
         [HttpGet("{expenseTypeId}")]
+        [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId, int expenseTypeId)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
@@ -31,15 +49,9 @@ namespace DockerTestBD.Api.Controllers
                 return BadRequest(new ExpenseType());
             return Ok(expenseType);
         }
-        [HttpPost]
-        public IActionResult Post(int companyId, ExpenseType expenseType)
-        {
-            expenseType.CompanyId = companyId;
-            expenseTypes.Add(expenseType);
-            dbContext.SaveChanges();
-            return Ok();
-        }
+
         [HttpDelete("{expenseTypeId}")]
+        [Authorize(Roles = "owner")]
         public IActionResult Delet(int companyId, int expenseTypeId)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
@@ -52,15 +64,19 @@ namespace DockerTestBD.Api.Controllers
             return Ok();
         }
 
-        [HttpPut]
-        public IActionResult Update(int companyId, ExpenseType entity)
+        [HttpPut("{expenseTypeId}")]
+        [Authorize(Roles = "owner")]
+        public IActionResult Update(int companyId, int expenseTypeId, ExpenseType entity)
         {
-            if (entity.CompanyId != companyId)
-                return BadRequest(new ExpenseType());
+            ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
 
-            if (entity.Limit <= 0) return BadRequest(new ExpenseType());
+            if (entity.Limit <= 0 || expenseType == null) return BadRequest(new ExpenseType());
 
-            expenseTypes.Update(entity);
+            expenseType.Name = entity.Name;
+            expenseType.Description = entity.Description;
+            expenseType.Limit = entity.Limit;
+
+            expenseTypes.Update(expenseType);
             dbContext.SaveChanges();
             return Ok();
         }

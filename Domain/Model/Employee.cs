@@ -5,14 +5,8 @@ namespace Domain.Model
 {
     public class Employee : BaseDbEntity
     {
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-
-        [JsonIgnore]
-        public int RoleId { get; set; }
-        [Required]
-        public virtual Role Role { get; set; } = null!;
+        public int UserId { get; set; }
+        public virtual User user { get; set; } = null!;
 
         [JsonIgnore]
         public int? DepartmentId { get; set; }

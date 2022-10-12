@@ -1,8 +1,10 @@
 ﻿using Context;
 using Context.Queryable;
 using Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -13,6 +15,7 @@ namespace DockerTestBD.Api.Controllers
         ApiRoute.FromDepartment +
         ApiRoute.controller)]
     [ApiController]
+    [Authorize(Roles = "owner,accountant")]
     public class BugetPlanController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;
@@ -26,8 +29,24 @@ namespace DockerTestBD.Api.Controllers
         [HttpPost]
         public IActionResult Create(int departmentId, BugetPlan bugetPlan)
         {
-            bugetPlan.DeparmentId = departmentId;
-            bugetPlans.Add(bugetPlan);
+            BugetPlan newBugetPlan = new BugetPlan
+            {
+                DeparmentId = departmentId,
+
+                January = bugetPlan.January,
+                February = bugetPlan.February,
+                March = bugetPlan.March,
+                April = bugetPlan.April,          
+                May = bugetPlan.May,
+                June = bugetPlan.June,           
+                July = bugetPlan.July,          
+                August = bugetPlan.August,
+                September = bugetPlan.September,
+                October = bugetPlan.October,
+                November = bugetPlan.November,
+                December = bugetPlan.December 
+                };
+            bugetPlans.Add(newBugetPlan);
             dbContext.SaveChanges();
             return Ok();
         }

@@ -1,33 +1,74 @@
-﻿using Microsoft.AspNetCore.Authentication.OAuth;
+﻿using Context;
+using Domain.Model;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Framework;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Policy;
+using System.Xml.Linq;
 
 namespace DockerTestBD.Api.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
-    //public class AuthorizationController : ControllerBase
-    //{
-    //    public void Register(string name, string login, string password)
-    //    {
-    //        var claims = new List<Claim> 
-    //        { 
-    //            new Claim(ClaimTypes.Name, name),
-    //            new Claim(ClaimTypes.Email, login),
-    //        };
-    //        userma
-    //        var jwt = new JwtSecurityToken(
-    //                issuer: AuthOptions.ISSUER,
-    //                audience: AuthOptions.AUDIENCE,
-    //                claims: claims,
-    //                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)), // время действия 2 минуты
-    //                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthorizationController : ControllerBase
+    {
+        readonly ApplicationDbContext dbContext;
+        readonly DbSet<User> users;
+        public AuthorizationController(ApplicationDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+            users = dbContext.users;
+        }
 
-    //        return new JwtSecurityTokenHandler().WriteToken(jwt);
-    //    }
-    //}
+        [HttpPost("Register")]
+        public IActionResult Register(string name, string login, string password, string roleName)
+        {
+            Role? role = dbContext.roles.Where(r => r.Name == roleName).SingleOrDefault();
+            if (role == null) return BadRequest("Not exist role");
+
+            User newUser = new User
+            {
+                Name = name,
+                Email = login,
+                Password = password,
+                role = role,
+            };
+
+            users.Add(newUser);
+            dbContext.SaveChanges();
+            return Ok();
+        }
+        [HttpPost("Login")]
+        public IActionResult Login(string email, string password)
+        {
+            User? loginUser = users
+                .Where(u => u.Email == email && u.Password == password)
+                .SingleOrDefault();
+            if (loginUser == null)
+                return Unauthorized("incorect email");
+
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, loginUser.Name),
+                new Claim(ClaimTypes.Email, loginUser.Email),
+                new Claim(ClaimTypes.Role, loginUser.role.Name)
+            };
+
+            JwtSecurityToken jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    claims: claims,
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromDays(1)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+
+            return Ok(new JwtSecurityTokenHandler().WriteToken(jwt));
+        }
+    }
 }

@@ -69,6 +69,12 @@ namespace Context.Migrations
                     b.Property<decimal>("September")
                         .HasColumnType("money");
 
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("modifyDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DeparmentId")
@@ -88,6 +94,12 @@ namespace Context.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("modifyDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -115,6 +127,12 @@ namespace Context.Migrations
                     b.Property<decimal>("budget")
                         .HasColumnType("money");
 
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("modifyDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasAlternateKey("CompanyId", "Name");
@@ -133,26 +151,20 @@ namespace Context.Migrations
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("RoleId")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("modifyDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("employees");
                 });
@@ -183,11 +195,17 @@ namespace Context.Migrations
                     b.Property<decimal>("amount")
                         .HasColumnType("money");
 
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime>("date")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("employeeId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("modifyDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -222,6 +240,12 @@ namespace Context.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("modifyDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -241,6 +265,12 @@ namespace Context.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("modifyDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
                     b.ToTable("roles");
@@ -249,18 +279,60 @@ namespace Context.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "user"
+                            Name = "user",
+                            createDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7023),
+                            modifyDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7023)
                         },
                         new
                         {
                             Id = 1,
-                            Name = "owner"
+                            Name = "owner",
+                            createDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7017),
+                            modifyDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7019)
                         },
                         new
                         {
                             Id = 2,
-                            Name = "accountant"
+                            Name = "accountant",
+                            createDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7022),
+                            modifyDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7022)
                         });
+                });
+
+            modelBuilder.Entity("Domain.Model.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("createDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("modifyDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("Domain.Model.BugetPlan", b =>
@@ -292,15 +364,15 @@ namespace Context.Migrations
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Domain.Model.Role", "Role")
-                        .WithMany("users")
-                        .HasForeignKey("RoleId")
+                    b.HasOne("Domain.Model.User", "user")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Department");
 
-                    b.Navigation("Role");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("Domain.Model.Expense", b =>
@@ -338,6 +410,17 @@ namespace Context.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Domain.Model.User", b =>
+                {
+                    b.HasOne("Domain.Model.Role", "role")
+                        .WithMany("users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("role");
                 });
 
             modelBuilder.Entity("Domain.Model.Company", b =>

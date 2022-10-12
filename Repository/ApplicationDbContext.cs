@@ -13,12 +13,15 @@ namespace Context
         public DbSet<ExpenseType> expenseTypes { get; set; } = null!;
         public DbSet<BugetPlan> bugetPlans { get; set; } = null!;
         public DbSet<Role> roles { get; set; } = null!;
+        public DbSet<User> users { get; set; } = null!;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=dockerApiDb;Username=postgres;Password=secretochka2442");
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseNpgsql("Host=localhost;Port=5432;Database=dockerApiDb;Username=postgres;Password=secretochka2442");
             base.OnConfiguring(optionsBuilder);
         }
 

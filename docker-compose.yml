@@ -1,21 +1,6 @@
 version: '3.4'
 
 services:
-  api:
-    container_name: api
-    image: ${DOCKER_REGISTRY-}api
-    build:
-      context: .
-      dockerfile: Api/Dockerfile
-    command:
-    - dotnet ef migrations bundle
-    ports:
-    - "49151:80"
-    depends_on:
-    - postgres
-    networks:
-    - docker_db
-
   postgres:
     container_name: postgresdb
     image: postgres:13.3
@@ -57,8 +42,25 @@ services:
       PGADMIN_CONFIG_SERVER_MODE: "False"
     ports:
       - "5050:80"
+    depends_on:
+    - postgres
     networks:
       - docker_db
+
+  api:
+    container_name: api
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    command:
+    - dotnet ef migrations bundle
+    ports:
+    - "49151:80"
+    depends_on:
+    - postgres
+    networks:
+    - docker_db
 
 networks:
   docker_db:

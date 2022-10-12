@@ -1,6 +1,7 @@
 ﻿using Context;
 using Context.Queryable;
 using Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,6 +10,7 @@ namespace DockerTestBD.Api.Controllers
     [Route(ApiRoute.baseRoute +
         ApiRoute.controller)]
     [ApiController]
+    [Authorize(Roles = "owner")]
     public class CompanyController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;
@@ -36,7 +38,11 @@ namespace DockerTestBD.Api.Controllers
         [HttpPost]
         public IActionResult CreateCompany([FromBody] Company company)
         {
-            companies.Add(company);
+            Company newCompany = new Company
+            {
+                Name = company.Name,
+            };
+            companies.Add(newCompany);
             dbContext.SaveChanges();
             return Ok();
         }

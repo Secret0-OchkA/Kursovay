@@ -9,7 +9,7 @@ namespace Api.Test.Infrastructura
 {
     class ApplicationDbContextTest : ApplicationDbContext
     {
-        public ApplicationDbContextTest(DbContextOptions<ApplicationDbContextTest> options) : base(options)
+        public ApplicationDbContextTest(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 

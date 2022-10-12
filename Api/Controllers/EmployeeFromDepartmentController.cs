@@ -1,6 +1,7 @@
 ﻿using Context;
 using Context.Queryable;
 using Domain.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace DockerTestBD.Api.Controllers
         ApiRoute.Deparment + ApiRoute.FromDepartment +
         ApiRoute.controller)]
     [ApiController()]
+    [Authorize(Roles = "owner")]
     public class EmployeeFromDepartmentController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;

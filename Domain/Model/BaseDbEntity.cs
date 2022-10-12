@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        //public DateTime createDate { get; set; } = DateTime.Now;
-        //public DateTime modifyDate { get; set; } = DateTime.Now;
+        public DateTime createDate { get; set; } = DateTime.UtcNow;
+        public DateTime modifyDate { get; set; } = DateTime.UtcNow;
     }
 }

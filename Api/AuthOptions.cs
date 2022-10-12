@@ -7,7 +7,7 @@ namespace DockerTestBD.Api
     {
         public const string ISSUER = "Secretus"; 
         public const string AUDIENCE = "mobileApp"; 
-        const string KEY = "secretochka2442";   
+        const string KEY = "secretochka2442secretochka2442secretochka2442";   
         public static SymmetricSecurityKey GetSymmetricSecurityKey() =>
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(KEY));
     }
