@@ -10,6 +10,7 @@ namespace Domain.Model
 
         [JsonIgnore]
         public int ExpenseTypeId { get; set; }
+        [JsonIgnore]
         [Required]
         public virtual ExpenseType expenseType { get; set; } = null!;
 
@@ -18,11 +19,13 @@ namespace Domain.Model
 
         [JsonIgnore]
         public int DepartmentId { get; set; }
+        [JsonIgnore]
         [Required]
         public virtual Department department { get; set; } = null!;
 
         [JsonIgnore]
         public int EmploeeId { get; set; }
+        [JsonIgnore]
         public virtual Employee? employee { get; set; }
     }
 }

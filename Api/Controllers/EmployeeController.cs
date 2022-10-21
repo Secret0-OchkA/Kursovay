@@ -21,16 +21,16 @@ namespace DockerTestBD.Api.Controllers
             employees = dbContext.employees;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetEmployee")]
         public IActionResult Get(int id)
         {
             Employee? employee = employees.GetObj(id);
-            if (employee == null) return BadRequest(new Employee());
+            if (employee == null) return BadRequest("not exist employee");
 
             return Ok(employee);
         }
-        [HttpGet]
-        public IActionResult GetAll()
+        [HttpGet(Name = "GetEmployees")]
+        public IActionResult Get()
             => Ok(employees.ToList());
 
         //[HttpDelete]

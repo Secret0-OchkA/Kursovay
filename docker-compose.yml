@@ -49,12 +49,10 @@ services:
 
   api:
     container_name: api
-    image: api-kursovay
+    image: secretochka/api-kursovay:latest
     build:
       context: .
       dockerfile: Api/Dockerfile
-    command:
-    - dotnet ef migrations bundle
     ports:
     - "49151:80"
     depends_on:

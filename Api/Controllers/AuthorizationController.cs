@@ -27,6 +27,14 @@ namespace DockerTestBD.Api.Controllers
             users = dbContext.users;
         }
 
+        /// <summary>
+        /// Register new Account
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="login"></param>
+        /// <param name="password"></param>
+        /// <param name="roleName"></param>
+        /// <response code="200">registry new account</response>
         [HttpPost("Register")]
         public IActionResult Register(string name, string login, string password, string roleName)
         {
@@ -45,6 +53,13 @@ namespace DockerTestBD.Api.Controllers
             dbContext.SaveChanges();
             return Ok();
         }
+        /// <summary>
+        /// generation jwt token on 1 day
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <response code="200">success generation jwt token</response>
+        /// <returns>jwt token</returns>
         [HttpPost("Login")]
         public IActionResult Login(string email, string password)
         {

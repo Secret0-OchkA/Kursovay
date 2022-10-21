@@ -22,10 +22,16 @@ namespace DockerTestBD.Api.Controllers
             this.dbContext = dbContext;
             departments = dbContext.departments;
         }
-
-        [HttpPost]
+        /// <summary>
+        /// create department in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="department"></param>
+        /// <response code="200"></response>
+        /// <returns></returns>
+        [HttpPost(Name = "CreateDepartment")]
         [Authorize(Roles = "owner")]
-        public IActionResult CreateDepartment(int companyId, Department department)
+        public IActionResult Create(int companyId, Department department)
         {
             Department newDepartment = new Department
             {
@@ -39,42 +45,71 @@ namespace DockerTestBD.Api.Controllers
 
             return Ok();
         }
-        [HttpDelete]
+        /// <summary>
+        /// Delete department in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpDelete(Name = "DeleteDepartment")]
         [Authorize(Roles = "owner")]
-        public IActionResult DeleteDepartment(int companyId, int departmentId)
+        public IActionResult Delete(int companyId, int departmentId)
         {
             Department? department = departments
                 .ByCompany(companyId)
                 .GetObj(departmentId);
-            if (department == null) return BadRequest();
+            if (department == null) return BadRequest("not exist department in company");
 
             departments.Remove(department);
             dbContext.SaveChanges();
             return Ok();
         }
-
-        [HttpGet]
+        /// <summary>
+        /// get departments in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <response code="200"></response>
+        /// <returns></returns>
+        [HttpGet(Name = "GetDepartments")]
         [Authorize(Roles = "owner,accountant")]
-        public IActionResult GetDepartment(int companyId)
+        public IActionResult Get(int companyId)
             => Ok(departments.ByCompany(companyId));
-
-        [HttpGet("{departmentId}")]
+        /// <summary>
+        /// get department by id in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpGet("{departmentId}", Name = "GetDepartment")]
         [Authorize(Roles = "owner,accountant")]
-        public IActionResult GetDepartment(int companyId, int departmentId)
+        public IActionResult Get(int companyId, int departmentId)
         {
             Department? department = departments
                 .ByCompany(companyId)
                 .GetObj(departmentId);
-            if (department == null) return BadRequest(new Department());
+            if (department == null) return BadRequest("not exist department in company");
 
             return Ok(department);
         }
-        [HttpPut("{departmentId}")]
+        /// <summary>
+        /// set buget department by id in company
+        /// </summary>
+        /// <param name="departmentId"></param>
+        /// <param name="buget"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPut("{departmentId}", Name = "SetBugetDeparmtnet")]
         [Authorize(Roles = "owner")]
         public IActionResult SetBuget(int departmentId, decimal buget)
         {
             Department? department = departments.GetObj(departmentId);
-            if (department == null) return BadRequest(new Department());
+            if (department == null) return BadRequest("Not exist department in company");
+            if (buget < 0) return BadRequest("incorect new buget");
 
             department.budget = buget;
             departments.Update(department);

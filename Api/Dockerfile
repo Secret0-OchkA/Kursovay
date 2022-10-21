@@ -2,20 +2,22 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
+EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["TestDockerBD/TestDockerBD.csproj", "TestDockerBD/"]
-RUN dotnet restore "TestDockerBD/TestDockerBD.csproj"
+COPY ["Api/Api.csproj", "Api/"]
+COPY ["Repository/Context.csproj", "Repository/"]
+COPY ["Domain/Domain.csproj", "Domain/"]
+RUN dotnet restore "Api/Api.csproj"
 COPY . .
-WORKDIR "/src/TestDockerBD"
-RUN dotnet build "TestDockerBD.csproj" -c Release -o /app/build
-RUN dotnet ef migrations bundle
+WORKDIR "/src/Api"
+RUN dotnet build "Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "TestDockerBD.csproj" -c Release -o /app/publish
+RUN dotnet publish "Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "TestDockerBD.dll"]
+ENTRYPOINT ["dotnet", "Api.dll"]

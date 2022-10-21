@@ -20,8 +20,14 @@ namespace DockerTestBD.Api.Controllers
             this.dbContext = dbContext;
             expenseTypes = dbContext.expenseTypes;
         }
-
-        [HttpPost]
+        /// <summary>
+        /// create new expenseType in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="expenseType"></param>
+        /// <response code="200"></response>
+        /// <returns></returns>
+        [HttpPost(Name = "CreateExpenseTypeInCompany")]
         [Authorize(Roles = "owner")]
         public IActionResult Post(int companyId, ExpenseType expenseType)
         {
@@ -36,41 +42,69 @@ namespace DockerTestBD.Api.Controllers
             dbContext.SaveChanges();
             return Ok();
         }
-        [HttpGet]
+        /// <summary>
+        /// get expense types in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <response code="200"></response>
+        /// <returns></returns>
+        [HttpGet(Name = "GetEpxensTypesInCompany")]
         [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId)
             => Ok(expenseTypes.ByCompany(companyId).ToList());
-        [HttpGet("{expenseTypeId}")]
+        /// <summary>
+        /// get expense type in company by id
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="expenseTypeId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpGet("{expenseTypeId}",Name = "GetExpenseTypeInCompany")]
         [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId, int expenseTypeId)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
-            if (expenseType == null)
-                return BadRequest(new ExpenseType());
+            if (expenseType == null) return BadRequest("not exist expenseType");
             return Ok(expenseType);
         }
-
-        [HttpDelete("{expenseTypeId}")]
+        /// <summary>
+        /// delete expense type in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="expenseTypeId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpDelete("{expenseTypeId}",Name = "DeleteExpenseTypeInCompany")]
         [Authorize(Roles = "owner")]
         public IActionResult Delet(int companyId, int expenseTypeId)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
 
-            if (expenseType == null)
-                return BadRequest();
+            if (expenseType == null) return BadRequest("not exist expenseType");
 
             expenseTypes.Remove(expenseType);
             dbContext.SaveChanges();
             return Ok();
         }
-
-        [HttpPut("{expenseTypeId}")]
+        /// <summary>
+        /// can change name,limit, description
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="expenseTypeId"></param>
+        /// <param name="entity"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPut("{expenseTypeId}",Name = "UpdateExpenseType")]
         [Authorize(Roles = "owner")]
         public IActionResult Update(int companyId, int expenseTypeId, ExpenseType entity)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
 
-            if (entity.Limit <= 0 || expenseType == null) return BadRequest(new ExpenseType());
+            if (entity.Limit <= 0) return BadRequest("limit <= 0");
+            if (expenseType == null) return BadRequest("expenseType not exist");
 
             expenseType.Name = entity.Name;
             expenseType.Description = entity.Description;

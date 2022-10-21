@@ -22,7 +22,7 @@ namespace Service.Test
             string name = "testCreateCompany";
             Company company = new Company { Name = name };
 
-            controller.CreateCompany(company);
+            controller.Create(company);
 
             Company actual = dbContext.companies.Where(c => c.Name == name).Single();
 

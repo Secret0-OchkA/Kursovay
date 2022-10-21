@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DockerTestBD.Api.Controllers
 {
@@ -10,10 +11,17 @@ namespace DockerTestBD.Api.Controllers
     public class OkController : ControllerBase
     {
         /// <summary>
-        /// method for connect
+        /// for check connect
         /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public string OK() => "OK";
+        /// <returns>Ok</returns>
+        [HttpGet(Name = "CheckConnectToApi")]
+        public IActionResult OK() => Ok();
+        /// <summary>
+        /// for check auth
+        /// </summary>
+        /// <returns>Ok</returns>
+        [Authorize]
+        [HttpGet("OkAuth",Name = "CheckAuth")]
+        public IActionResult OKAuth() => Ok("Ok Auth");
     }
 }

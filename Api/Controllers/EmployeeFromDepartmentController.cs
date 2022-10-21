@@ -24,20 +24,44 @@ namespace DockerTestBD.Api.Controllers
             employees = dbContext.employees;
             departments = dbContext.departments;
         }
-
-        [HttpGet]
-        public IActionResult GetEmployee(int companyId, int departmentId)
+        /// <summary>
+        /// get employees in department in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <response code="200"></response>
+        /// <returns></returns>
+        [HttpGet(Name = "GetEmployeesInDepartment")]
+        public IActionResult Get(int companyId, int departmentId)
             => Ok(employees.ByCompany(companyId).ByDepartment(departmentId).ToList());
-        [HttpGet("{employeeId}")]
-        public IActionResult GetEmployee(int companyId, int departmentId, int employeeId)
+        /// <summary>
+        /// get employee in department in company by id
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <param name="employeeId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpGet("{employeeId}",Name = "GetEmployeeInDepartment" )]
+        public IActionResult Get(int companyId, int departmentId, int employeeId)
         {
             Employee? employee = employees.ByCompany(companyId).ByDepartment(departmentId).GetObj(employeeId);
-            if (employee == null) return BadRequest(new Employee());
+            if (employee == null) return BadRequest("not exist employee");
 
             return Ok(employee);
         }
 
-        [HttpDelete("{employeeId}")]
+        /// <summary>
+        /// remove employee from department in company
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <param name="employeeId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpDelete("{employeeId}",Name = "DismissEmployee")]
         public IActionResult Remove(int companyId, int departmentId, int employeeId)
         {
             Employee? employee = employees
@@ -45,11 +69,10 @@ namespace DockerTestBD.Api.Controllers
                 .ByDepartment(departmentId)
                 .GetObj(employeeId);
             Department? department = departments.ByCompany(companyId).GetObj(departmentId);
-            if (employee == null || department == null)
-                return BadRequest(new Employee());
+            if (employee == null ) return BadRequest("not exist employee");
+            if (department == null) return BadRequest("the employee is not hired");
 
-            if (!department.employees.Contains(employee))
-                return BadRequest();
+            if (!department.employees.Contains(employee)) return BadRequest("employee doesn't work in this department");
 
             department.employees.Remove(employee);
 
@@ -58,16 +81,26 @@ namespace DockerTestBD.Api.Controllers
 
             return Ok(employee);
         }
-        [HttpPost("{employeeId}")]
+        /// <summary>
+        /// add epmployee to department
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <param name="employeeId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPost("{employeeId}", Name ="HireEmployee")]
         public IActionResult Add(int companyId, int departmentId, int employeeId)
         {
             Employee? employee = employees.GetObj(employeeId);
             Department? department = departments.ByCompany(companyId).GetObj(departmentId);
-            if (employee == null || department == null)
-                return BadRequest(new Employee());
+            if (employee == null) return BadRequest("not exist employee");
+            if (department == null) return BadRequest("not exist department");
 
-            if (department.employees.Contains(employee))
-                return BadRequest();
+            if (employee.Department != null) return BadRequest("employee works in another department");
+
+            if (department.employees.Contains(employee)) return BadRequest("employee is already working in department");
 
             department.employees.Add(employee);
 

@@ -26,9 +26,21 @@ namespace DockerTestBD.Api.Controllers
             bugetPlans = dbContext.bugetPlans;
         }
 
-        [HttpPost]
-        public IActionResult Create(int departmentId, BugetPlan bugetPlan)
+        /// <summary>
+        /// можно создать только 1 на департамент
+        /// </summary>
+        /// <param name="departmentId"></param>
+        /// <param name="bugetPlan"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPost(Name = "CreateBugetPlan")]
+        public IActionResult Create(int companyId,int departmentId, BugetPlan bugetPlan)
         {
+            Department? department = dbContext.departments.ByCompany(companyId).GetObj(departmentId);
+            if (department == null) return BadRequest("not exist department");
+            if (department.bugetPlan != null) return BadRequest("department have plan");
+
             BugetPlan newBugetPlan = new BugetPlan
             {
                 DeparmentId = departmentId,
@@ -50,34 +62,59 @@ namespace DockerTestBD.Api.Controllers
             dbContext.SaveChanges();
             return Ok();
         }
-
-        [HttpDelete("{bugetPlanId}")]
-        public IActionResult Delete(int departmentId, int bugetPlanId)
+        /// <summary>
+        /// delet bugetplan
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <param name="bugetPlanId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns>DeletBugetPlan</returns>
+        [HttpDelete("{bugetPlanId}", Name = "DeletBugetPlan")]
+        public IActionResult Delete(int companyId, int departmentId, int bugetPlanId)
         {
-            BugetPlan? bp = bugetPlans.ByDepartment(departmentId).GetObj(bugetPlanId);
+            BugetPlan? bp = bugetPlans.ByCompany(companyId).ByDepartment(departmentId).GetObj(bugetPlanId);
 
-            if (bp == null) return BadRequest();
+            if (bp == null) return BadRequest("not exist buget plan");
 
             bugetPlans.Remove(bp);
             dbContext.SaveChanges();
             return Ok();
         }
-
-        [HttpGet("{bugetPlanId}")]
-        public IActionResult GetBugetPlan(int companyId, int departmentId, int bugetPlanId)
+        /// <summary>
+        /// get buget plan
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <param name="bugetPlanId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns>BugetPlan</returns>
+        [HttpGet("{bugetPlanId}", Name = "GetBugetPlan")]
+        public IActionResult Get(int companyId, int departmentId, int bugetPlanId)
         {
             BugetPlan? bp = bugetPlans
                 .ByCompany(companyId)
                 .ByDepartment(departmentId)
                 .GetObj(bugetPlanId);
 
-            if (bp == null)
-                return BadRequest(new BugetPlan());
+            if (bp == null) return BadRequest("not exist buget plan");
 
             return Ok(bp);
         }
-
-        [HttpPut("{bugetPlanId}")]
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmentId"></param>
+        /// <param name="bugetPlanId"></param>
+        /// <param name="month"></param>
+        /// <param name="amount"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns>update bugetplan</returns>
+        [HttpPut("{bugetPlanId}", Name = "SetMonthBuget")]
         public IActionResult SetMonthBuget(int companyId, int departmentId, int bugetPlanId, [FromQuery] Month month, [FromQuery] decimal amount)
         {
             BugetPlan? bp = bugetPlans
@@ -86,7 +123,7 @@ namespace DockerTestBD.Api.Controllers
                .GetObj(bugetPlanId);
 
             if (bp == null)
-                return BadRequest(new BugetPlan());
+                return BadRequest("not exist buget plan");
 
             switch (month)
             {
@@ -102,13 +139,14 @@ namespace DockerTestBD.Api.Controllers
                 case Month.October: bp.October = amount; break;
                 case Month.November: bp.November = amount; break;
                 case Month.December: bp.December = amount; break;
+
+                default: return BadRequest("incorect month");
             }
 
             bugetPlans.Update(bp);
             dbContext.SaveChanges();
             return Ok(bp);
         }
-
     }
 
     public enum Month

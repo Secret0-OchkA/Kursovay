@@ -21,7 +21,7 @@ namespace Context
         {
             optionsBuilder
                 .UseLazyLoadingProxies()
-                .UseNpgsql("Host=localhost;Port=5432;Database=dockerApiDb;Username=postgres;Password=secretochka2442");
+                .UseNpgsql("Host=postgresdb;Port=5432;Database=apidb;Username=postgres;Password=secretochka2442");
             base.OnConfiguring(optionsBuilder);
         }
 

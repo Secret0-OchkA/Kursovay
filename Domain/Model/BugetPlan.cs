@@ -7,6 +7,7 @@ namespace Domain.Model
     {
         [JsonIgnore]
         public int DeparmentId { get; set; }
+        [JsonIgnore]
         [Required]
         public virtual Department Department { get; set; } = null!;
 

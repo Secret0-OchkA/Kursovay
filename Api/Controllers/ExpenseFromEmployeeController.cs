@@ -22,14 +22,22 @@ namespace DockerTestBD.Api.Controllers
             this.dbContext = dbContext;
             expenses = dbContext.expenses;
         }
-
-        [HttpPost]
+        /// <summary>
+        /// create expense for employee
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="value"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPost(Name = "CreateExpense")]
         [Authorize(Roles = "user")]
-        public IActionResult CreateExpense(int employeeId, Expense value)
+        public IActionResult Create(int employeeId, Expense value)
         {
             Employee? employee = dbContext.employees.GetObj(employeeId);
-            if (employee == null || employee.Department == null) return BadRequest();
-            if (value.amount < 0 || value.amount > value.expenseType.Limit) return BadRequest();
+            if (employee == null) return BadRequest("not exist employee");
+            if (employee.Department == null) return BadRequest("employee not work in department");
+            if (value.amount < 0 || value.amount > value.expenseType.Limit) return BadRequest("amout < 0 || amout > limit");
 
             Expense expense = new Expense
             {
@@ -42,28 +50,49 @@ namespace DockerTestBD.Api.Controllers
             dbContext.SaveChanges();
             return Ok();
         }
-
-        [HttpGet]
+        /// <summary>
+        /// get expenses in emploee
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <response code="200"></response>
+        /// <returns></returns>
+        [HttpGet(Name = "GetExpenses")]
         [Authorize]
         public IActionResult Get(int employeeId)
             => Ok(expenses.ByEmployee(employeeId).ToList());
-        [HttpGet("{expenseId}")]
+        /// <summary>
+        /// get expense in employee
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="expenseId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpGet("{expenseId}",Name ="GetExpense")]
         [Authorize]
         public IActionResult Get(int employeeId, int expenseId)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
-            if (expense == null) return BadRequest(new Expense());
+            if (expense == null) return BadRequest("not exist expense");
 
             return Ok(expense);
         }
-
-        [HttpPut("{expenseId}/Confirm")]
+        /// <summary>
+        /// confirm expense if expense is valid
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="expenseId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPut("{expenseId}/Confirm",Name = "ConfirmExpense")]
         [Authorize(Roles = "accountant")]
         public IActionResult Confirm(int employeeId, int expenseId)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
 
-            if (expense == null || expense.Valid == false) return BadRequest(new Expense());
+            if (expense == null) return BadRequest("not exist expense");
+            if (expense.Valid == false) return BadRequest("expense not valid");
 
             expense.Confirm = true;
 
@@ -72,12 +101,20 @@ namespace DockerTestBD.Api.Controllers
 
             return Ok(expense);
         }
-        [HttpPut("{expenseId}/Validate")]
+        /// <summary>
+        /// validate expense
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="expenseId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPut("{expenseId}/Validate",Name = "ValidateEpxense")]
         [Authorize(Roles = "accountant")]
         public IActionResult Validate(int employeeId, int expenseId)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
-            if (expense == null) return BadRequest(new Exception());
+            if (expense == null) return BadRequest("not exist expense");
 
             expense.Valid = true;
 
@@ -85,13 +122,23 @@ namespace DockerTestBD.Api.Controllers
             dbContext.SaveChanges();
             return Ok(expense);
         }
-        [HttpPut("{expenseId}/ChangeAmmount")]
+        /// <summary>
+        /// Change ammout if not confirmed
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="expenseId"></param>
+        /// <param name="amount"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPut("{expenseId}/ChangeAmmount",Name = "ChangeAmmount")]
         [Authorize(Roles = "user")]
         public IActionResult ChangeAmmount(int employeeId, int expenseId, decimal amount)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
-            if (expense == null || expense.Confirm == true) return BadRequest(new Expense());
-            if (amount < 0 || amount > expense.expenseType.Limit) return BadRequest(new Expense());
+            if (expense == null) return BadRequest("not exist expense");
+            if (expense.Confirm == true) return BadRequest("expense confirmed");
+            if (amount < 0 || amount > expense.expenseType.Limit) return BadRequest("amout < 0 || amout > limit");
 
             expense.Valid = false;
             expense.amount = amount;
@@ -101,15 +148,26 @@ namespace DockerTestBD.Api.Controllers
             dbContext.SaveChanges();
             return Ok(expense);
         }
-        [HttpPut("{expenseId}/SetType/{expenseTypeId}")]
+        /// <summary>
+        /// change type if not confirmed
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <param name="expenseId"></param>
+        /// <param name="expenseTypeId"></param>
+        /// <response code="200"></response>
+        /// <response code="400"></response>
+        /// <returns></returns>
+        [HttpPut("{expenseId}/SetType/{expenseTypeId}",Name = "SetExpenseType")]
         [Authorize(Roles = "user")]
         public IActionResult SetExpenseType(int employeeId, int expenseId, int expenseTypeId)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
-            if (expense == null || expense.Confirm == true) return BadRequest(new Expense());
+            if (expense == null) return BadRequest("expense not exist");
+            if (expense.Confirm == true) return BadRequest("expense confirmed");
 
             ExpenseType? expenseType = dbContext.expenseTypes.ByCompany(employeeId).GetObj(expenseTypeId);
-            if (expenseType == null || expense.amount > expenseType.Limit) return BadRequest(new Expense());
+            if (expenseType == null) return BadRequest("expenseType not exist");
+            if (expense.amount > expenseType.Limit) return BadRequest("amout < 0 || amout > limit");
 
             expense.Valid = false;
             expense.expenseType = expenseType;
