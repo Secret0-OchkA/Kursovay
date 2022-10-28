@@ -17,7 +17,7 @@ namespace Context.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -280,22 +280,22 @@ namespace Context.Migrations
                         {
                             Id = 3,
                             Name = "user",
-                            createDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7023),
-                            modifyDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7023)
+                            createDate = new DateTime(2022, 10, 22, 14, 44, 15, 680, DateTimeKind.Utc).AddTicks(9224),
+                            modifyDate = new DateTime(2022, 10, 22, 14, 44, 15, 680, DateTimeKind.Utc).AddTicks(9224)
                         },
                         new
                         {
                             Id = 1,
                             Name = "owner",
-                            createDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7017),
-                            modifyDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7019)
+                            createDate = new DateTime(2022, 10, 22, 14, 44, 15, 680, DateTimeKind.Utc).AddTicks(9220),
+                            modifyDate = new DateTime(2022, 10, 22, 14, 44, 15, 680, DateTimeKind.Utc).AddTicks(9222)
                         },
                         new
                         {
                             Id = 2,
                             Name = "accountant",
-                            createDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7022),
-                            modifyDate = new DateTime(2022, 10, 12, 14, 52, 1, 302, DateTimeKind.Utc).AddTicks(7022)
+                            createDate = new DateTime(2022, 10, 22, 14, 44, 15, 680, DateTimeKind.Utc).AddTicks(9223),
+                            modifyDate = new DateTime(2022, 10, 22, 14, 44, 15, 680, DateTimeKind.Utc).AddTicks(9223)
                         });
                 });
 

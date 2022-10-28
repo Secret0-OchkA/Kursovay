@@ -7,8 +7,8 @@
         public const string Company = "Company/";
         public const string FromCompany = "{companyId}/";
 
-        public const string Deparment = "Deparment/";
-        public const string FromDepartment = "{deparmtnetId}/";
+        public const string Deparment = "Department/";
+        public const string FromDepartment = "{departmnetId}/";
 
         public const string Employee = "Employee/";
         public const string FromEmployee = "{employeeId}/";

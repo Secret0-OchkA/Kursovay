@@ -12,6 +12,7 @@ namespace DockerTestBD.Api.Controllers
     [Route(ApiRoute.baseRoute +
         ApiRoute.Employee + ApiRoute.FromEmployee +
         ApiRoute.controller)]
+    [Produces("application/json")]
     [ApiController]
     public class ExpenseFromEmployeeController : ControllerBase
     {
@@ -27,9 +28,9 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="employeeId"></param>
         /// <param name="value"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPost(Name = "CreateExpense")]
         [Authorize(Roles = "user")]
         public IActionResult Create(int employeeId, Expense value)
@@ -54,8 +55,8 @@ namespace DockerTestBD.Api.Controllers
         /// get expenses in emploee
         /// </summary>
         /// <param name="employeeId"></param>
-        /// <response code="200"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(List<Expense>),200)]
         [HttpGet(Name = "GetExpenses")]
         [Authorize]
         public IActionResult Get(int employeeId)
@@ -65,9 +66,9 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="employeeId"></param>
         /// <param name="expenseId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{expenseId}",Name ="GetExpense")]
         [Authorize]
         public IActionResult Get(int employeeId, int expenseId)
@@ -82,9 +83,9 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="employeeId"></param>
         /// <param name="expenseId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/Confirm",Name = "ConfirmExpense")]
         [Authorize(Roles = "accountant")]
         public IActionResult Confirm(int employeeId, int expenseId)
@@ -106,9 +107,9 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="employeeId"></param>
         /// <param name="expenseId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/Validate",Name = "ValidateEpxense")]
         [Authorize(Roles = "accountant")]
         public IActionResult Validate(int employeeId, int expenseId)
@@ -128,9 +129,9 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="employeeId"></param>
         /// <param name="expenseId"></param>
         /// <param name="amount"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/ChangeAmmount",Name = "ChangeAmmount")]
         [Authorize(Roles = "user")]
         public IActionResult ChangeAmmount(int employeeId, int expenseId, decimal amount)
@@ -154,9 +155,9 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="employeeId"></param>
         /// <param name="expenseId"></param>
         /// <param name="expenseTypeId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/SetType/{expenseTypeId}",Name = "SetExpenseType")]
         [Authorize(Roles = "user")]
         public IActionResult SetExpenseType(int employeeId, int expenseId, int expenseTypeId)

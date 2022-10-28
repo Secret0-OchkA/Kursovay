@@ -15,8 +15,10 @@ using System.Xml.Linq;
 
 namespace DockerTestBD.Api.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthorizationController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;
@@ -34,7 +36,8 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="login"></param>
         /// <param name="password"></param>
         /// <param name="roleName"></param>
-        /// <response code="200">registry new account</response>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPost("Register")]
         public IActionResult Register(string name, string login, string password, string roleName)
         {
@@ -58,8 +61,8 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="email"></param>
         /// <param name="password"></param>
-        /// <response code="200">success generation jwt token</response>
         /// <returns>jwt token</returns>
+        [ProducesResponseType(200, Type = typeof(string))]
         [HttpPost("Login")]
         public IActionResult Login(string email, string password)
         {

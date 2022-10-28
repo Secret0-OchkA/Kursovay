@@ -15,6 +15,7 @@ namespace DockerTestBD.Api.Controllers
         ApiRoute.FromDepartment +
         ApiRoute.controller)]
     [ApiController]
+    [Produces("application/json")]
     [Authorize(Roles = "owner,accountant")]
     public class BugetPlanController : ControllerBase
     {
@@ -29,21 +30,21 @@ namespace DockerTestBD.Api.Controllers
         /// <summary>
         /// можно создать только 1 на департамент
         /// </summary>
-        /// <param name="departmentId"></param>
+        /// <param name="departmnetId"></param>
         /// <param name="bugetPlan"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPost(Name = "CreateBugetPlan")]
-        public IActionResult Create(int companyId,int departmentId, BugetPlan bugetPlan)
+        public IActionResult Create(int companyId,int departmnetId, BugetPlan bugetPlan)
         {
-            Department? department = dbContext.departments.ByCompany(companyId).GetObj(departmentId);
+            Department? department = dbContext.departments.ByCompany(companyId).GetObj(departmnetId);
             if (department == null) return BadRequest("not exist department");
             if (department.bugetPlan != null) return BadRequest("department have plan");
 
             BugetPlan newBugetPlan = new BugetPlan
             {
-                DeparmentId = departmentId,
+                DeparmentId = departmnetId,
 
                 January = bugetPlan.January,
                 February = bugetPlan.February,
@@ -66,15 +67,15 @@ namespace DockerTestBD.Api.Controllers
         /// delet bugetplan
         /// </summary>
         /// <param name="companyId"></param>
-        /// <param name="departmentId"></param>
+        /// <param name="departmnetId"></param>
         /// <param name="bugetPlanId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns>DeletBugetPlan</returns>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpDelete("{bugetPlanId}", Name = "DeletBugetPlan")]
-        public IActionResult Delete(int companyId, int departmentId, int bugetPlanId)
+        public IActionResult Delete(int companyId, int departmnetId, int bugetPlanId)
         {
-            BugetPlan? bp = bugetPlans.ByCompany(companyId).ByDepartment(departmentId).GetObj(bugetPlanId);
+            BugetPlan? bp = bugetPlans.ByCompany(companyId).ByDepartment(departmnetId).GetObj(bugetPlanId);
 
             if (bp == null) return BadRequest("not exist buget plan");
 
@@ -86,17 +87,17 @@ namespace DockerTestBD.Api.Controllers
         /// get buget plan
         /// </summary>
         /// <param name="companyId"></param>
-        /// <param name="departmentId"></param>
+        /// <param name="departmnetId"></param>
         /// <param name="bugetPlanId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
-        /// <returns>BugetPlan</returns>
+        /// <returns type="BugetPlan"></returns>
+        [ProducesResponseType(200, Type = typeof(BugetPlan))]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{bugetPlanId}", Name = "GetBugetPlan")]
-        public IActionResult Get(int companyId, int departmentId, int bugetPlanId)
+        public IActionResult Get(int companyId, int departmnetId, int bugetPlanId)
         {
             BugetPlan? bp = bugetPlans
                 .ByCompany(companyId)
-                .ByDepartment(departmentId)
+                .ByDepartment(departmnetId)
                 .GetObj(bugetPlanId);
 
             if (bp == null) return BadRequest("not exist buget plan");
@@ -107,19 +108,19 @@ namespace DockerTestBD.Api.Controllers
         /// 
         /// </summary>
         /// <param name="companyId"></param>
-        /// <param name="departmentId"></param>
+        /// <param name="departmnetId"></param>
         /// <param name="bugetPlanId"></param>
         /// <param name="month"></param>
         /// <param name="amount"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns>update bugetplan</returns>
+        [ProducesResponseType(200, Type = typeof(BugetPlan))]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{bugetPlanId}", Name = "SetMonthBuget")]
-        public IActionResult SetMonthBuget(int companyId, int departmentId, int bugetPlanId, [FromQuery] Month month, [FromQuery] decimal amount)
+        public IActionResult SetMonthBuget(int companyId, int departmnetId, int bugetPlanId, [FromQuery] Month month, [FromQuery] decimal amount)
         {
             BugetPlan? bp = bugetPlans
                .ByCompany(companyId)
-               .ByDepartment(departmentId)
+               .ByDepartment(departmnetId)
                .GetObj(bugetPlanId);
 
             if (bp == null)

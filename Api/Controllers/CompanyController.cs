@@ -10,6 +10,7 @@ namespace DockerTestBD.Api.Controllers
     [Route(ApiRoute.baseRoute +
         ApiRoute.controller)]
     [ApiController]
+    [Produces("application/json")]
     [Authorize(Roles = "owner")]
     public class CompanyController : ControllerBase
     {
@@ -24,8 +25,8 @@ namespace DockerTestBD.Api.Controllers
         /// <summary>
         /// get all company
         /// </summary>
-        /// <response code="200"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(List<Company>), 200)]
         [HttpGet(Name = "GetCompanyes")]
         public IActionResult Get()
             => Ok(companies.ToList());
@@ -34,6 +35,8 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Company), 200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{id}", Name = "GetCompany")]
         public IActionResult Get(int id)
         {
@@ -47,8 +50,8 @@ namespace DockerTestBD.Api.Controllers
         /// create company from object
         /// </summary>
         /// <param name="company"></param>
-        /// <response code="200"></response>
         /// <returns></returns>
+        [ProducesResponseType(200)]
         [HttpPost(Name = "CreateCompany")]
         public IActionResult Create([FromBody] Company company)
         {
@@ -64,9 +67,9 @@ namespace DockerTestBD.Api.Controllers
         /// Delete company by id
         /// </summary>
         /// <param name="id"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpDelete("{id}", Name = "DeletCompany")]
         public IActionResult Delete(int id)
         {
@@ -82,9 +85,9 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <param name="name"></param>
-        /// <response code="200"></response>
-        /// <response code="400">Not exist company</response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Company), 200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{id}/{name}",Name = "ChangeName")]
         public IActionResult ChangeName(int id, string name)
         {

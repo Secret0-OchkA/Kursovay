@@ -10,6 +10,7 @@ namespace DockerTestBD.Api.Controllers
     [Route(ApiRoute.baseRoute +
         ApiRoute.controller)]
     [ApiController]
+    [Produces("application/json")]
     [Authorize]
     public class EmployeeController : ControllerBase
     {
@@ -20,7 +21,8 @@ namespace DockerTestBD.Api.Controllers
             this.dbContext = dbContext;
             employees = dbContext.employees;
         }
-
+        [ProducesResponseType(typeof(Employee), 200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{id}", Name = "GetEmployee")]
         public IActionResult Get(int id)
         {
@@ -29,6 +31,7 @@ namespace DockerTestBD.Api.Controllers
 
             return Ok(employee);
         }
+        [ProducesResponseType(typeof(List<Employee>),200)]
         [HttpGet(Name = "GetEmployees")]
         public IActionResult Get()
             => Ok(employees.ToList());

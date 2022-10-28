@@ -10,6 +10,7 @@ namespace DockerTestBD.Api.Controllers
     [Route(ApiRoute.baseRoute +
         ApiRoute.Company + ApiRoute.FromCompany +
         ApiRoute.controller)]
+    [Produces("application/json")]
     [ApiController]
     public class ExpenseTypeController : ControllerBase
     {
@@ -25,8 +26,8 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="companyId"></param>
         /// <param name="expenseType"></param>
-        /// <response code="200"></response>
         /// <returns></returns>
+        [ProducesResponseType(200)]
         [HttpPost(Name = "CreateExpenseTypeInCompany")]
         [Authorize(Roles = "owner")]
         public IActionResult Post(int companyId, ExpenseType expenseType)
@@ -46,8 +47,8 @@ namespace DockerTestBD.Api.Controllers
         /// get expense types in company
         /// </summary>
         /// <param name="companyId"></param>
-        /// <response code="200"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(List<ExpenseType>),200)]
         [HttpGet(Name = "GetEpxensTypesInCompany")]
         [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId)
@@ -57,9 +58,9 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="companyId"></param>
         /// <param name="expenseTypeId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(ExpenseType),200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{expenseTypeId}",Name = "GetExpenseTypeInCompany")]
         [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId, int expenseTypeId)
@@ -73,9 +74,9 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="companyId"></param>
         /// <param name="expenseTypeId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpDelete("{expenseTypeId}",Name = "DeleteExpenseTypeInCompany")]
         [Authorize(Roles = "owner")]
         public IActionResult Delet(int companyId, int expenseTypeId)
@@ -94,9 +95,9 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="companyId"></param>
         /// <param name="expenseTypeId"></param>
         /// <param name="entity"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseTypeId}",Name = "UpdateExpenseType")]
         [Authorize(Roles = "owner")]
         public IActionResult Update(int companyId, int expenseTypeId, ExpenseType entity)

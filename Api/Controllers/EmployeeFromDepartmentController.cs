@@ -12,6 +12,7 @@ namespace DockerTestBD.Api.Controllers
         ApiRoute.Deparment + ApiRoute.FromDepartment +
         ApiRoute.controller)]
     [ApiController()]
+    [Produces("application/json")]
     [Authorize(Roles = "owner")]
     public class EmployeeFromDepartmentController : ControllerBase
     {
@@ -28,25 +29,25 @@ namespace DockerTestBD.Api.Controllers
         /// get employees in department in company
         /// </summary>
         /// <param name="companyId"></param>
-        /// <param name="departmentId"></param>
-        /// <response code="200"></response>
+        /// <param name="departmnetId"></param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(List<Employee>),200)]
         [HttpGet(Name = "GetEmployeesInDepartment")]
-        public IActionResult Get(int companyId, int departmentId)
-            => Ok(employees.ByCompany(companyId).ByDepartment(departmentId).ToList());
+        public IActionResult Get(int companyId, int departmnetId)
+            => Ok(employees.ByCompany(companyId).ByDepartment(departmnetId).ToList());
         /// <summary>
         /// get employee in department in company by id
         /// </summary>
         /// <param name="companyId"></param>
-        /// <param name="departmentId"></param>
+        /// <param name="departmnetId"></param>
         /// <param name="employeeId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Employee),200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{employeeId}",Name = "GetEmployeeInDepartment" )]
-        public IActionResult Get(int companyId, int departmentId, int employeeId)
+        public IActionResult Get(int companyId, int departmnetId, int employeeId)
         {
-            Employee? employee = employees.ByCompany(companyId).ByDepartment(departmentId).GetObj(employeeId);
+            Employee? employee = employees.ByCompany(companyId).ByDepartment(departmnetId).GetObj(employeeId);
             if (employee == null) return BadRequest("not exist employee");
 
             return Ok(employee);
@@ -56,19 +57,19 @@ namespace DockerTestBD.Api.Controllers
         /// remove employee from department in company
         /// </summary>
         /// <param name="companyId"></param>
-        /// <param name="departmentId"></param>
+        /// <param name="departmnetId"></param>
         /// <param name="employeeId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(typeof(Employee),200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpDelete("{employeeId}",Name = "DismissEmployee")]
-        public IActionResult Remove(int companyId, int departmentId, int employeeId)
+        public IActionResult Remove(int companyId, int departmnetId, int employeeId)
         {
             Employee? employee = employees
                 .ByCompany(companyId)
-                .ByDepartment(departmentId)
+                .ByDepartment(departmnetId)
                 .GetObj(employeeId);
-            Department? department = departments.ByCompany(companyId).GetObj(departmentId);
+            Department? department = departments.ByCompany(companyId).GetObj(departmnetId);
             if (employee == null ) return BadRequest("not exist employee");
             if (department == null) return BadRequest("the employee is not hired");
 
@@ -85,16 +86,16 @@ namespace DockerTestBD.Api.Controllers
         /// add epmployee to department
         /// </summary>
         /// <param name="companyId"></param>
-        /// <param name="departmentId"></param>
+        /// <param name="departmnetId"></param>
         /// <param name="employeeId"></param>
-        /// <response code="200"></response>
-        /// <response code="400"></response>
         /// <returns></returns>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
         [HttpPost("{employeeId}", Name ="HireEmployee")]
-        public IActionResult Add(int companyId, int departmentId, int employeeId)
+        public IActionResult Add(int companyId, int departmnetId, int employeeId)
         {
             Employee? employee = employees.GetObj(employeeId);
-            Department? department = departments.ByCompany(companyId).GetObj(departmentId);
+            Department? department = departments.ByCompany(companyId).GetObj(departmnetId);
             if (employee == null) return BadRequest("not exist employee");
             if (department == null) return BadRequest("not exist department");
 
