@@ -12,8 +12,6 @@ namespace Context
         public DbSet<Expense> expenses { get; set; } = null!;
         public DbSet<ExpenseType> expenseTypes { get; set; } = null!;
         public DbSet<BugetPlan> bugetPlans { get; set; } = null!;
-        public DbSet<Role> roles { get; set; } = null!;
-        public DbSet<User> users { get; set; } = null!;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
@@ -21,7 +19,7 @@ namespace Context
         {
             optionsBuilder
                 .UseLazyLoadingProxies()
-                .UseNpgsql("Host=localhost;Port=5432;Database=dockerApiDb;Username=postgres;Password=secretochka2442");
+                .UseNpgsql("Host=postgresdb;Port=5432;Database=apidb;Username=postgres;Password=secretochka2442");
             base.OnConfiguring(optionsBuilder);
         }
 
@@ -33,7 +31,6 @@ namespace Context
             modelBuilder.ApplyConfiguration(new EmployeeMap());
             modelBuilder.ApplyConfiguration(new ExpenseMap());
             modelBuilder.ApplyConfiguration(new ExpenseTypeMap());
-            modelBuilder.ApplyConfiguration(new RoleMap());
 
             base.OnModelCreating(modelBuilder);
         }

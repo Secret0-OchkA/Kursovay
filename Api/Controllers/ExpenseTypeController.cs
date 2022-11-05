@@ -29,7 +29,6 @@ namespace DockerTestBD.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(200)]
         [HttpPost(Name = "CreateExpenseTypeInCompany")]
-        [Authorize(Roles = "owner")]
         public IActionResult Post(int companyId, ExpenseType expenseType)
         {
             ExpenseType newExpenseType = new ExpenseType
@@ -50,7 +49,6 @@ namespace DockerTestBD.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(typeof(List<ExpenseType>),200)]
         [HttpGet(Name = "GetEpxensTypesInCompany")]
-        [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId)
             => Ok(expenseTypes.ByCompany(companyId).ToList());
         /// <summary>
@@ -62,7 +60,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(ExpenseType),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{expenseTypeId}",Name = "GetExpenseTypeInCompany")]
-        [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId, int expenseTypeId)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
@@ -78,7 +75,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpDelete("{expenseTypeId}",Name = "DeleteExpenseTypeInCompany")]
-        [Authorize(Roles = "owner")]
         public IActionResult Delet(int companyId, int expenseTypeId)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
@@ -99,7 +95,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseTypeId}",Name = "UpdateExpenseType")]
-        [Authorize(Roles = "owner")]
         public IActionResult Update(int companyId, int expenseTypeId, ExpenseType entity)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);

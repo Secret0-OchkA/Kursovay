@@ -32,7 +32,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPost(Name = "CreateExpense")]
-        [Authorize(Roles = "user")]
         public IActionResult Create(int employeeId, Expense value)
         {
             Employee? employee = dbContext.employees.GetObj(employeeId);
@@ -58,7 +57,6 @@ namespace DockerTestBD.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(typeof(List<Expense>),200)]
         [HttpGet(Name = "GetExpenses")]
-        [Authorize]
         public IActionResult Get(int employeeId)
             => Ok(expenses.ByEmployee(employeeId).ToList());
         /// <summary>
@@ -70,7 +68,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(Expense),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{expenseId}",Name ="GetExpense")]
-        [Authorize]
         public IActionResult Get(int employeeId, int expenseId)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
@@ -87,7 +84,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(Expense),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/Confirm",Name = "ConfirmExpense")]
-        [Authorize(Roles = "accountant")]
         public IActionResult Confirm(int employeeId, int expenseId)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
@@ -111,7 +107,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(Expense),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/Validate",Name = "ValidateEpxense")]
-        [Authorize(Roles = "accountant")]
         public IActionResult Validate(int employeeId, int expenseId)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
@@ -133,7 +128,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(Expense),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/ChangeAmmount",Name = "ChangeAmmount")]
-        [Authorize(Roles = "user")]
         public IActionResult ChangeAmmount(int employeeId, int expenseId, decimal amount)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
@@ -159,7 +153,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(Expense),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/SetType/{expenseTypeId}",Name = "SetExpenseType")]
-        [Authorize(Roles = "user")]
         public IActionResult SetExpenseType(int employeeId, int expenseId, int expenseTypeId)
         {
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);

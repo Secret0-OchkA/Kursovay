@@ -16,7 +16,6 @@ namespace DockerTestBD.Api.Controllers
         ApiRoute.controller)]
     [ApiController]
     [Produces("application/json")]
-    [Authorize(Roles = "owner,accountant")]
     public class BugetPlanController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;
@@ -30,6 +29,7 @@ namespace DockerTestBD.Api.Controllers
         /// <summary>
         /// можно создать только 1 на департамент
         /// </summary>
+        /// <param name="companyId"></param>
         /// <param name="departmnetId"></param>
         /// <param name="bugetPlan"></param>
         /// <returns></returns>

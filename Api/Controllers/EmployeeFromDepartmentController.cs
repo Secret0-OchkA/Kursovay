@@ -13,7 +13,6 @@ namespace DockerTestBD.Api.Controllers
         ApiRoute.controller)]
     [ApiController()]
     [Produces("application/json")]
-    [Authorize(Roles = "owner")]
     public class EmployeeFromDepartmentController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;

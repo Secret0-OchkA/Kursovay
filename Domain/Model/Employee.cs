@@ -5,9 +5,7 @@ namespace Domain.Model
 {
     public class Employee : BaseDbEntity
     {
-        public int UserId { get; set; }
-        [JsonIgnore]
-        public virtual User user { get; set; } = null!;
+        public string Name { get; set; } = "";
 
         [JsonIgnore]
         public int? DepartmentId { get; set; }

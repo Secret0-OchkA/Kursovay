@@ -31,7 +31,6 @@ namespace DockerTestBD.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(200)]
         [HttpPost(Name = "CreateDepartment")]
-        [Authorize(Roles = "owner")]
         public IActionResult Create(int companyId, Department department)
         {
             Department newDepartment = new Department
@@ -55,7 +54,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpDelete(Name = "DeleteDepartment")]
-        [Authorize(Roles = "owner")]
         public IActionResult Delete(int companyId, int departmnetId)
         {
             Department? department = departments
@@ -74,7 +72,6 @@ namespace DockerTestBD.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(typeof(List<Department>),200)]
         [HttpGet(Name = "GetDepartments")]
-        [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId)
             => Ok(departments.ByCompany(companyId));
         /// <summary>
@@ -86,7 +83,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(Department),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{departmnetId}", Name = "GetDepartment")]
-        [Authorize(Roles = "owner,accountant")]
         public IActionResult Get(int companyId, int departmnetId)
         {
             Department? department = departments
@@ -105,7 +101,6 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(Department),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{departmnetId}", Name = "SetBugetDeparmtnet")]
-        [Authorize(Roles = "owner")]
         public IActionResult SetBuget(int departmnetId, decimal buget)
         {
             Department? department = departments.GetObj(departmnetId);

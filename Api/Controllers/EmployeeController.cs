@@ -11,7 +11,6 @@ namespace DockerTestBD.Api.Controllers
         ApiRoute.controller)]
     [ApiController]
     [Produces("application/json")]
-    [Authorize]
     public class EmployeeController : ControllerBase
     {
         readonly ApplicationDbContext dbContext;
@@ -21,6 +20,7 @@ namespace DockerTestBD.Api.Controllers
             this.dbContext = dbContext;
             employees = dbContext.employees;
         }
+
         [ProducesResponseType(typeof(Employee), 200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{id}", Name = "GetEmployee")]
@@ -31,19 +31,38 @@ namespace DockerTestBD.Api.Controllers
 
             return Ok(employee);
         }
+
         [ProducesResponseType(typeof(List<Employee>),200)]
         [HttpGet(Name = "GetEmployees")]
         public IActionResult Get()
             => Ok(employees.ToList());
 
-        //[HttpDelete]
-        //public IActionResult Delete(int id)
-        //{
-        //    Employee? employee = employees.GetObj(id);
-        //    if (employee == null) return BadRequest();
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
+        [HttpDelete("{id}", Name = "DeleteEmployee")]
+        public IActionResult Delete(int id)
+        {
+            Employee? employee = employees.GetObj(id);
+            if (employee == null) return BadRequest("not exist employee");
 
-        //    return Ok();
-        //}
-        //TODO: UpdateMethods
+            employees.Remove(employee);
+            dbContext.SaveChanges();
+
+            return Ok();
+        }
+
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
+        [HttpPost(Name = "CreateEmployee")]
+        public IActionResult Create([FromBody] Employee value)
+        {
+            Employee employee = new Employee();
+            employee.Name = value.Name;
+
+            employees.Add(employee);
+            dbContext.SaveChanges();
+
+            return Ok();
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿аCREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+﻿CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
     "MigrationId" character varying(150) NOT NULL,
     "ProductVersion" character varying(32) NOT NULL,
     CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
@@ -216,6 +216,41 @@ WHERE "Id" = 3;
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
 VALUES ('20221012145201_changeTypeInRole', '6.0.10');
+
+COMMIT;
+
+START TRANSACTION;
+
+UPDATE roles SET "createDate" = TIMESTAMPTZ '2022-10-22 14:44:15.680922Z', "modifyDate" = TIMESTAMPTZ '2022-10-22 14:44:15.680922Z'
+WHERE "Id" = 1;
+
+UPDATE roles SET "createDate" = TIMESTAMPTZ '2022-10-22 14:44:15.680922Z', "modifyDate" = TIMESTAMPTZ '2022-10-22 14:44:15.680922Z'
+WHERE "Id" = 2;
+
+UPDATE roles SET "createDate" = TIMESTAMPTZ '2022-10-22 14:44:15.680922Z', "modifyDate" = TIMESTAMPTZ '2022-10-22 14:44:15.680922Z'
+WHERE "Id" = 3;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20221022144415_addMigration', '6.0.10');
+
+COMMIT;
+
+START TRANSACTION;
+
+ALTER TABLE employees DROP CONSTRAINT "FK_employees_users_UserId";
+
+DROP TABLE users;
+
+DROP TABLE roles;
+
+DROP INDEX "IX_employees_UserId";
+
+ALTER TABLE employees DROP COLUMN "UserId";
+
+ALTER TABLE employees ADD "Name" text NOT NULL DEFAULT '';
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20221105193845_removeAuth', '6.0.10');
 
 COMMIT;
 

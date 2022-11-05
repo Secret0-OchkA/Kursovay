@@ -17,13 +17,5 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [HttpGet(Name = "CheckConnectToApi")]
         public IActionResult OK() => Ok();
-        /// <summary>
-        /// for check auth
-        /// </summary>
-        /// <returns>Ok</returns>
-        [ProducesResponseType(200)]
-        [Authorize]
-        [HttpGet("OkAuth",Name = "CheckAuth")]
-        public IActionResult OKAuth() => Ok("Ok Auth");
     }
 }
