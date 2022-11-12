@@ -1,5 +1,6 @@
 ﻿using Context;
 using Context.Queryable;
+using Domain.ApiModel;
 using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPost(Name = "CreateBugetPlan")]
-        public IActionResult Create(int companyId,int departmnetId, BugetPlan bugetPlan)
+        public IActionResult Create(int companyId,int departmnetId, BugetPlanView bugetPlan)
         {
             Department? department = dbContext.departments.ByCompany(companyId).GetObj(departmnetId);
             if (department == null) return BadRequest("not exist department");
@@ -89,8 +90,8 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="companyId"></param>
         /// <param name="departmnetId"></param>
         /// <param name="bugetPlanId"></param>
-        /// <returns type="BugetPlan"></returns>
-        [ProducesResponseType(200, Type = typeof(BugetPlan))]
+        /// <returns type="BugetPlanView"></returns>
+        [ProducesResponseType(200, Type = typeof(BugetPlanView))]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{bugetPlanId}", Name = "GetBugetPlan")]
         public IActionResult Get(int companyId, int departmnetId, int bugetPlanId)
@@ -113,7 +114,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="month"></param>
         /// <param name="amount"></param>
         /// <returns>update bugetplan</returns>
-        [ProducesResponseType(200, Type = typeof(BugetPlan))]
+        [ProducesResponseType(200, Type = typeof(BugetPlanView))]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{bugetPlanId}", Name = "SetMonthBuget")]
         public IActionResult SetMonthBuget(int companyId, int departmnetId, int bugetPlanId, [FromQuery] Month month, [FromQuery] decimal amount)

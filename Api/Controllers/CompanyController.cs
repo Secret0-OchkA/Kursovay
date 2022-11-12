@@ -1,5 +1,6 @@
 ﻿using Context;
 using Context.Queryable;
+using Domain.ApiModel;
 using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace DockerTestBD.Api.Controllers
         /// get all company
         /// </summary>
         /// <returns></returns>
-        [ProducesResponseType(typeof(List<Company>), 200)]
+        [ProducesResponseType(typeof(List<CompanyView>), 200)]
         [HttpGet(Name = "GetCompanyes")]
         public IActionResult Get()
             => Ok(companies.ToList());
@@ -34,7 +35,7 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Company), 200)]
+        [ProducesResponseType(typeof(CompanyView), 200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{id}", Name = "GetCompany")]
         public IActionResult Get(int id)
@@ -52,7 +53,7 @@ namespace DockerTestBD.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(200)]
         [HttpPost(Name = "CreateCompany")]
-        public IActionResult Create([FromBody] Company company)
+        public IActionResult Create([FromBody] CompanyView company)
         {
             Company newCompany = new Company
             {
@@ -85,7 +86,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="id"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Company), 200)]
+        [ProducesResponseType(typeof(CompanyView), 200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{id}/{name}",Name = "ChangeName")]
         public IActionResult ChangeName(int id, string name)

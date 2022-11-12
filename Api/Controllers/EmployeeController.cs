@@ -1,5 +1,6 @@
 ﻿using Context;
 using Context.Queryable;
+using Domain.ApiModel;
 using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace DockerTestBD.Api.Controllers
             employees = dbContext.employees;
         }
 
-        [ProducesResponseType(typeof(Employee), 200)]
+        [ProducesResponseType(typeof(EmployeeView), 200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{id}", Name = "GetEmployee")]
         public IActionResult Get(int id)
@@ -32,7 +33,7 @@ namespace DockerTestBD.Api.Controllers
             return Ok(employee);
         }
 
-        [ProducesResponseType(typeof(List<Employee>),200)]
+        [ProducesResponseType(typeof(List<EmployeeView>),200)]
         [HttpGet(Name = "GetEmployees")]
         public IActionResult Get()
             => Ok(employees.ToList());
@@ -54,7 +55,7 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPost(Name = "CreateEmployee")]
-        public IActionResult Create([FromBody] Employee value)
+        public IActionResult Create([FromBody] EmployeeView value)
         {
             Employee employee = new Employee();
             employee.Name = value.Name;

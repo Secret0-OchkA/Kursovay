@@ -1,5 +1,6 @@
 ﻿using Context;
 using Context.Queryable;
+using Domain.ApiModel;
 using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace DockerTestBD.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(200)]
         [HttpPost(Name = "CreateDepartment")]
-        public IActionResult Create(int companyId, Department department)
+        public IActionResult Create(int companyId, DepartmentView department)
         {
             Department newDepartment = new Department
             {
@@ -70,7 +71,7 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="companyId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(List<Department>),200)]
+        [ProducesResponseType(typeof(List<DepartmentView>),200)]
         [HttpGet(Name = "GetDepartments")]
         public IActionResult Get(int companyId)
             => Ok(departments.ByCompany(companyId));
@@ -80,7 +81,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="companyId"></param>
         /// <param name="departmnetId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Department),200)]
+        [ProducesResponseType(typeof(DepartmentView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{departmnetId}", Name = "GetDepartment")]
         public IActionResult Get(int companyId, int departmnetId)
@@ -98,7 +99,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="departmnetId"></param>
         /// <param name="buget"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Department),200)]
+        [ProducesResponseType(typeof(DepartmentView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{departmnetId}", Name = "SetBugetDeparmtnet")]
         public IActionResult SetBuget(int departmnetId, decimal buget)

@@ -1,14 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Domain.Model
+namespace Domain.ApiModel
 {
-    public class BugetPlan : BaseDbEntity
+    public class BugetPlanView : BaseViewEntity
     {
-        public int DeparmentId { get; set; }
-        [Required]
-        public virtual Department Department { get; set; } = null!;
-
         public decimal January { get; set; }
         public decimal February { get; set; }
         public decimal March { get; set; }

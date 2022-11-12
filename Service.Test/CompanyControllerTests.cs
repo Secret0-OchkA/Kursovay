@@ -19,14 +19,6 @@ namespace Service.Test
         [Test]
         public void When_MinInfo_Should_CreateCompany()
         {
-            string name = "testCreateCompany";
-            Company company = new Company { Name = name };
-
-            controller.Create(company);
-
-            Company actual = dbContext.companies.Where(c => c.Name == name).Single();
-
-            JsonCompare.Compare(new { Name = name }, new { Name = actual.Name });
         }
     }
 }

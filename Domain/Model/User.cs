@@ -16,9 +16,7 @@ namespace Domain.Model
 
         public bool Activity = false;
 
-        [JsonIgnore]
         public int RoleId { get; set; }
-        [JsonIgnore]
         [Required]
         public virtual Role role { get; set; } = null!;
     }

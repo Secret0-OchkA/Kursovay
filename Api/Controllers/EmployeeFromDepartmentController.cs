@@ -1,5 +1,6 @@
 ﻿using Context;
 using Context.Queryable;
+using Domain.ApiModel;
 using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="companyId"></param>
         /// <param name="departmnetId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(List<Employee>),200)]
+        [ProducesResponseType(typeof(List<EmployeeView>),200)]
         [HttpGet(Name = "GetEmployeesInDepartment")]
         public IActionResult Get(int companyId, int departmnetId)
             => Ok(employees.ByCompany(companyId).ByDepartment(departmnetId).ToList());
@@ -41,7 +42,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="departmnetId"></param>
         /// <param name="employeeId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Employee),200)]
+        [ProducesResponseType(typeof(EmployeeView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{employeeId}",Name = "GetEmployeeInDepartment" )]
         public IActionResult Get(int companyId, int departmnetId, int employeeId)
@@ -59,7 +60,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="departmnetId"></param>
         /// <param name="employeeId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Employee),200)]
+        [ProducesResponseType(typeof(EmployeeView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpDelete("{employeeId}",Name = "DismissEmployee")]
         public IActionResult Remove(int companyId, int departmnetId, int employeeId)

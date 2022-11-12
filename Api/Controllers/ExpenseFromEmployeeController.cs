@@ -1,5 +1,6 @@
 ﻿using Context;
 using Context.Queryable;
+using Domain.ApiModel;
 using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,16 +33,18 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPost(Name = "CreateExpense")]
-        public IActionResult Create(int employeeId, Expense value)
+        public IActionResult Create(int employeeId, ExpenseView value)
         {
             Employee? employee = dbContext.employees.GetObj(employeeId);
             if (employee == null) return BadRequest("not exist employee");
             if (employee.Department == null) return BadRequest("employee not work in department");
-            if (value.amount < 0 || value.amount > value.expenseType.Limit) return BadRequest("amout < 0 || amout > limit");
+            ExpenseType? expenseType = dbContext.expenseTypes.GetObj(value.expenseTypeId);
+            if (expenseType == null) return BadRequest("not exist expenseType");
+            if (value.amount < 0 || value.amount > expenseType.Limit) return BadRequest("amout < 0 || amout > limit");
 
             Expense expense = new Expense
             {
-                expenseType = value.expenseType,
+                expenseType = expenseType,
                 amount = value.amount,
                 department = employee.Department,
                 date = DateTime.UtcNow,
@@ -55,7 +58,7 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="employeeId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(List<Expense>),200)]
+        [ProducesResponseType(typeof(List<ExpenseView>),200)]
         [HttpGet(Name = "GetExpenses")]
         public IActionResult Get(int employeeId)
             => Ok(expenses.ByEmployee(employeeId).ToList());
@@ -65,7 +68,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="employeeId"></param>
         /// <param name="expenseId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesResponseType(typeof(ExpenseView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{expenseId}",Name ="GetExpense")]
         public IActionResult Get(int employeeId, int expenseId)
@@ -81,7 +84,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="employeeId"></param>
         /// <param name="expenseId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesResponseType(typeof(ExpenseView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/Confirm",Name = "ConfirmExpense")]
         public IActionResult Confirm(int employeeId, int expenseId)
@@ -104,7 +107,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="employeeId"></param>
         /// <param name="expenseId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesResponseType(typeof(ExpenseView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/Validate",Name = "ValidateEpxense")]
         public IActionResult Validate(int employeeId, int expenseId)
@@ -125,7 +128,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="expenseId"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesResponseType(typeof(ExpenseView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/ChangeAmmount",Name = "ChangeAmmount")]
         public IActionResult ChangeAmmount(int employeeId, int expenseId, decimal amount)
@@ -150,7 +153,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="expenseId"></param>
         /// <param name="expenseTypeId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesResponseType(typeof(ExpenseView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseId}/SetType/{expenseTypeId}",Name = "SetExpenseType")]
         public IActionResult SetExpenseType(int employeeId, int expenseId, int expenseTypeId)

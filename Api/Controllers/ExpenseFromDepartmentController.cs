@@ -1,5 +1,6 @@
 ﻿using Context;
 using Context.Queryable;
+using Domain.ApiModel;
 using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="companyId"></param>
         /// <param name="departmnetId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(List<Expense>),200)]
+        [ProducesResponseType(typeof(List<ExpenseView>),200)]
         [HttpGet(Name = "GetExpesesInDepartment")]
         public IActionResult Get(int companyId, int departmnetId)
             => Ok(expenses.ByCompany(companyId).ByDepartment(departmnetId).ToList());
@@ -39,7 +40,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="departmnetId"></param>
         /// <param name="expenseId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(Expense),200)]
+        [ProducesResponseType(typeof(ExpenseView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{expenseId}", Name = "GetExpenseInDeparment")]
         public IActionResult Get(int companyId, int departmnetId, int expenseId)

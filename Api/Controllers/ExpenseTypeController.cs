@@ -1,5 +1,6 @@
 ﻿using Context;
 using Context.Queryable;
+using Domain.ApiModel;
 using Domain.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace DockerTestBD.Api.Controllers
         /// <returns></returns>
         [ProducesResponseType(200)]
         [HttpPost(Name = "CreateExpenseTypeInCompany")]
-        public IActionResult Post(int companyId, ExpenseType expenseType)
+        public IActionResult Post(int companyId, ExpenseTypeView expenseType)
         {
             ExpenseType newExpenseType = new ExpenseType
             {
@@ -47,7 +48,7 @@ namespace DockerTestBD.Api.Controllers
         /// </summary>
         /// <param name="companyId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(List<ExpenseType>),200)]
+        [ProducesResponseType(typeof(List<ExpenseTypeView>),200)]
         [HttpGet(Name = "GetEpxensTypesInCompany")]
         public IActionResult Get(int companyId)
             => Ok(expenseTypes.ByCompany(companyId).ToList());
@@ -57,7 +58,7 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="companyId"></param>
         /// <param name="expenseTypeId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(ExpenseType),200)]
+        [ProducesResponseType(typeof(ExpenseTypeView),200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpGet("{expenseTypeId}",Name = "GetExpenseTypeInCompany")]
         public IActionResult Get(int companyId, int expenseTypeId)
@@ -95,7 +96,7 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]
         [HttpPut("{expenseTypeId}",Name = "UpdateExpenseType")]
-        public IActionResult Update(int companyId, int expenseTypeId, ExpenseType entity)
+        public IActionResult Update(int companyId, int expenseTypeId, ExpenseTypeView entity)
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
 
