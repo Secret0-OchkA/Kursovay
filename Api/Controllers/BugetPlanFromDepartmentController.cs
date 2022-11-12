@@ -103,7 +103,7 @@ namespace DockerTestBD.Api.Controllers
 
             if (bp == null) return BadRequest("not exist buget plan");
 
-            return Ok(bp);
+            return Ok(BugetPlan.ToView(bp));
         }
         /// <summary>
         /// 
@@ -147,7 +147,7 @@ namespace DockerTestBD.Api.Controllers
 
             bugetPlans.Update(bp);
             dbContext.SaveChanges();
-            return Ok(bp);
+            return Ok(BugetPlan.ToView(bp));
         }
     }
 

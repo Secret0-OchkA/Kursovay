@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.ApiModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Domain.Model
@@ -21,5 +22,7 @@ namespace Domain.Model
 
         public int EmploeeId { get; set; }
         public virtual Employee? employee { get; set; }
+
+        public static ExpenseView ToView(Expense entity) => new ExpenseView(entity);
     }
 }

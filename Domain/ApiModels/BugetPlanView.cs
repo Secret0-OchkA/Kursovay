@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using Domain.Model;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json.Serialization;
 
 namespace Domain.ApiModel
@@ -17,5 +20,21 @@ namespace Domain.ApiModel
         public decimal October { get; set; }
         public decimal November { get; set; }
         public decimal December { get; set; }
+
+        public BugetPlanView(BugetPlan bugetPlan) : base(bugetPlan)
+        {
+            this.January = bugetPlan.January;
+            this.February = bugetPlan.February;
+            this.March = bugetPlan.March;
+            this.April = bugetPlan.April;
+            this.May = bugetPlan.May;
+            this.June = bugetPlan.June;
+            this.July = bugetPlan.July;
+            this.August = bugetPlan.August;
+            this.September = bugetPlan.September;
+            this.October = bugetPlan.October;
+            this.November = bugetPlan.November;
+            this.December = bugetPlan.December;
+        }
     }
 }

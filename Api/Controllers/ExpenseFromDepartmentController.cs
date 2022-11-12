@@ -32,7 +32,7 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(List<ExpenseView>),200)]
         [HttpGet(Name = "GetExpesesInDepartment")]
         public IActionResult Get(int companyId, int departmnetId)
-            => Ok(expenses.ByCompany(companyId).ByDepartment(departmnetId).ToList());
+            => Ok(expenses.ByCompany(companyId).ByDepartment(departmnetId).ToList().ConvertAll(new Converter<Expense, ExpenseView>(Expense.ToView)));
         /// <summary>
         /// get expense in department by id
         /// </summary>
@@ -48,7 +48,7 @@ namespace DockerTestBD.Api.Controllers
             Expense? expense = expenses.ByCompany(companyId).ByDepartment(departmnetId).GetObj(expenseId);
             if (expense == null) return BadRequest("not exist expense");
 
-            return Ok(expense);
+            return Ok(Expense.ToView(expense));
         }
     }
 }

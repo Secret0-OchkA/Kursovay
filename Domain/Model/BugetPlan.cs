@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.ApiModel;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 namespace Domain.Model
@@ -21,5 +23,7 @@ namespace Domain.Model
         public decimal October { get; set; }
         public decimal November { get; set; }
         public decimal December { get; set; }
+
+        public static BugetPlanView ToView(BugetPlan entity) => new BugetPlanView(entity);
     }
 }

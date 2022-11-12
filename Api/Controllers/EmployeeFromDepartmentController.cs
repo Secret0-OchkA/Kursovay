@@ -31,10 +31,10 @@ namespace DockerTestBD.Api.Controllers
         /// <param name="companyId"></param>
         /// <param name="departmnetId"></param>
         /// <returns></returns>
-        [ProducesResponseType(typeof(List<EmployeeView>),200)]
+        [ProducesResponseType(typeof(List<EmployeeView>), 200)]
         [HttpGet(Name = "GetEmployeesInDepartment")]
         public IActionResult Get(int companyId, int departmnetId)
-            => Ok(employees.ByCompany(companyId).ByDepartment(departmnetId).ToList());
+            => Ok(employees.ByCompany(companyId).ByDepartment(departmnetId).ToList().ConvertAll(new Converter<Employee, EmployeeView>(Employee.ToView)));
         /// <summary>
         /// get employee in department in company by id
         /// </summary>
@@ -50,7 +50,7 @@ namespace DockerTestBD.Api.Controllers
             Employee? employee = employees.ByCompany(companyId).ByDepartment(departmnetId).GetObj(employeeId);
             if (employee == null) return BadRequest("not exist employee");
 
-            return Ok(employee);
+            return Ok(Employee.ToView(employee));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace DockerTestBD.Api.Controllers
             departments.Update(department);
             dbContext.SaveChanges();
 
-            return Ok(employee);
+            return Ok(Employee.ToView(employee));
         }
         /// <summary>
         /// add epmployee to department

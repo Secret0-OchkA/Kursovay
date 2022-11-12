@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Model;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Domain.ApiModel
@@ -8,5 +9,11 @@ namespace Domain.ApiModel
         public string Name { get; set; } = string.Empty;
 
         public decimal budget { get; set; }
+
+        public DepartmentView(Department department) : base(department)
+        {
+            this.Name = department.Name;
+            this.budget = department.budget;
+        }
     }
 }

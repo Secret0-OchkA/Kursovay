@@ -30,13 +30,13 @@ namespace DockerTestBD.Api.Controllers
             Employee? employee = employees.GetObj(id);
             if (employee == null) return BadRequest("not exist employee");
 
-            return Ok(employee);
+            return Ok(Employee.ToView(employee));
         }
 
         [ProducesResponseType(typeof(List<EmployeeView>),200)]
         [HttpGet(Name = "GetEmployees")]
         public IActionResult Get()
-            => Ok(employees.ToList());
+            => Ok(employees.ToList().ConvertAll(new Converter<Employee, EmployeeView>(Employee.ToView)));
 
         [ProducesResponseType(200)]
         [ProducesErrorResponseType(typeof(string))]

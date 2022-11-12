@@ -61,7 +61,7 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(List<ExpenseView>),200)]
         [HttpGet(Name = "GetExpenses")]
         public IActionResult Get(int employeeId)
-            => Ok(expenses.ByEmployee(employeeId).ToList());
+            => Ok(expenses.ByEmployee(employeeId).ToList().ConvertAll(new Converter<Expense, ExpenseView>(Expense.ToView)));
         /// <summary>
         /// get expense in employee
         /// </summary>
@@ -76,7 +76,7 @@ namespace DockerTestBD.Api.Controllers
             Expense? expense = expenses.ByEmployee(employeeId).GetObj(expenseId);
             if (expense == null) return BadRequest("not exist expense");
 
-            return Ok(expense);
+            return Ok(Expense.ToView(expense));
         }
         /// <summary>
         /// confirm expense if expense is valid
@@ -99,7 +99,7 @@ namespace DockerTestBD.Api.Controllers
             expenses.Update(expense);
             dbContext.SaveChanges();
 
-            return Ok(expense);
+            return Ok(Expense.ToView(expense));
         }
         /// <summary>
         /// validate expense
@@ -119,7 +119,7 @@ namespace DockerTestBD.Api.Controllers
 
             expenses.Update(expense);
             dbContext.SaveChanges();
-            return Ok(expense);
+            return Ok(Expense.ToView(expense));
         }
         /// <summary>
         /// Change ammout if not confirmed
@@ -144,7 +144,7 @@ namespace DockerTestBD.Api.Controllers
 
             expenses.Update(expense);
             dbContext.SaveChanges();
-            return Ok(expense);
+            return Ok(Expense.ToView(expense));
         }
         /// <summary>
         /// change type if not confirmed
@@ -173,7 +173,25 @@ namespace DockerTestBD.Api.Controllers
             expenses.Update(expense);
             dbContext.SaveChanges();
 
-            return Ok(expense);
+            return Ok(Expense.ToView(expense));
+        }
+        /// <summary>
+        /// Delete expense
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ProducesResponseType(200)]
+        [ProducesErrorResponseType(typeof(string))]
+        [HttpDelete("{id}", Name = "DeleteExpense")]
+        public IActionResult Delete(int id)
+        {
+            Expense? expense = expenses.GetObj(id);
+            if (expense == null) return BadRequest("not exist employee");
+
+            expenses.Remove(expense);
+            dbContext.SaveChanges();
+
+            return Ok();
         }
     }
 }

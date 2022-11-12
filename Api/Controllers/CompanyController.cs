@@ -29,7 +29,7 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(List<CompanyView>), 200)]
         [HttpGet(Name = "GetCompanyes")]
         public IActionResult Get()
-            => Ok(companies.ToList());
+            => Ok(companies.ToList().ConvertAll(new Converter<Company, CompanyView>(Company.ToView)));
         /// <summary>
         /// get company by id
         /// </summary>
@@ -44,7 +44,7 @@ namespace DockerTestBD.Api.Controllers
 
             if (company == null) return BadRequest("not exist company");
 
-            return Ok(company);
+            return Ok(Company.ToView(company));
         }
         /// <summary>
         /// create company from object
@@ -98,7 +98,7 @@ namespace DockerTestBD.Api.Controllers
             company.Name = name;
             companies.Update(company);
             dbContext.SaveChanges();
-            return Ok(company);
+            return Ok(Company.ToView(company));
         }
     }
 }

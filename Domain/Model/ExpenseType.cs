@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.ApiModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Domain.Model
@@ -15,5 +16,7 @@ namespace Domain.Model
         public int CompanyId { get; set; }
         [Required]
         public virtual Company Company { get; set; } = null!;
+
+        public static ExpenseTypeView ToView(ExpenseType entity) => new ExpenseTypeView(entity);
     }
 }

@@ -1,4 +1,7 @@
-﻿using Domain.Model;
+﻿using Domain.ApiModel;
+using Domain.Model;
+using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace Context.Queryable
 {

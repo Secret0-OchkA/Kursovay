@@ -74,7 +74,7 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(List<DepartmentView>),200)]
         [HttpGet(Name = "GetDepartments")]
         public IActionResult Get(int companyId)
-            => Ok(departments.ByCompany(companyId));
+            => Ok(departments.ByCompany(companyId).ToList().ConvertAll(new Converter<Department, DepartmentView>(Department.ToView)));
         /// <summary>
         /// get department by id in company
         /// </summary>
@@ -91,7 +91,7 @@ namespace DockerTestBD.Api.Controllers
                 .GetObj(departmnetId);
             if (department == null) return BadRequest("not exist department in company");
 
-            return Ok(department);
+            return Ok(Department.ToView(department));
         }
         /// <summary>
         /// set buget department by id in company
@@ -111,7 +111,7 @@ namespace DockerTestBD.Api.Controllers
             department.budget = buget;
             departments.Update(department);
             dbContext.SaveChanges();
-            return Ok(department);
+            return Ok(Department.ToView(department));
         }
     }
 }

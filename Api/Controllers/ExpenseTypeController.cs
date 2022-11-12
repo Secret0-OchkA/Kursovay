@@ -51,7 +51,7 @@ namespace DockerTestBD.Api.Controllers
         [ProducesResponseType(typeof(List<ExpenseTypeView>),200)]
         [HttpGet(Name = "GetEpxensTypesInCompany")]
         public IActionResult Get(int companyId)
-            => Ok(expenseTypes.ByCompany(companyId).ToList());
+            => Ok(expenseTypes.ByCompany(companyId).ToList().ConvertAll(new Converter<ExpenseType, ExpenseTypeView>(ExpenseType.ToView)));
         /// <summary>
         /// get expense type in company by id
         /// </summary>
@@ -65,7 +65,7 @@ namespace DockerTestBD.Api.Controllers
         {
             ExpenseType? expenseType = expenseTypes.ByCompany(companyId).GetObj(expenseTypeId);
             if (expenseType == null) return BadRequest("not exist expenseType");
-            return Ok(expenseType);
+            return Ok(ExpenseType.ToView(expenseType));
         }
         /// <summary>
         /// delete expense type in company
