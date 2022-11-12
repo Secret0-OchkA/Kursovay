@@ -10,11 +10,12 @@ namespace Domain.ApiModel
         public bool Confirm { get; set; } = false;
         public bool Valid { get; set; } = false;
 
-        public DateTime date { get; set; }
-        public decimal amount { get; set; }
+        public DateTime date { get; set; } = DateTime.Now;
+        public decimal amount { get; set; } = 0;
 
         public int expenseTypeId = 0;
 
+        public ExpenseView() { }
         public ExpenseView(Expense expense) : base(expense)
         {
             this.Confirm = expense.Confirm;

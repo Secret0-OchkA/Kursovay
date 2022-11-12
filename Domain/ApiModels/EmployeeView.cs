@@ -8,6 +8,7 @@ namespace Domain.ApiModel
     {
         public string Name { get; set; } = "";
 
+        public EmployeeView() { }
         public EmployeeView(Employee employee) : base(employee) => this.Name = employee.Name;
     }
 }

@@ -42,7 +42,11 @@ namespace DockerTestBD.Api.Controllers
             };
 
             departments.Add(newDepartment);
-            dbContext.SaveChanges();
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch(DbUpdateException) { return BadRequest("department with this name is exist"); }
 
             return Ok();
         }

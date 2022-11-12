@@ -10,8 +10,9 @@ namespace Domain.ApiModel
 
         public string Description { get; set; } = string.Empty;
 
-        public decimal Limit { get; set; }
+        public decimal Limit { get; set; } = 0;
 
+        public ExpenseTypeView() { }
         public ExpenseTypeView(ExpenseType expenseType) : base(expenseType)
         {
             this.Name = expenseType.Name;

@@ -8,8 +8,10 @@ namespace Domain.ApiModel
     {
         public string Name { get; set; } = string.Empty;
 
-        public decimal budget { get; set; }
+        public decimal budget { get; set; } = 0;
 
+
+        public DepartmentView() { }
         public DepartmentView(Department department) : base(department)
         {
             this.Name = department.Name;

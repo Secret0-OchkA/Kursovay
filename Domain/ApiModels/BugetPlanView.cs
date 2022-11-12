@@ -8,18 +8,20 @@ namespace Domain.ApiModel
 {
     public class BugetPlanView : BaseViewEntity
     {
-        public decimal January { get; set; }
-        public decimal February { get; set; }
-        public decimal March { get; set; }
-        public decimal April { get; set; }
-        public decimal May { get; set; }
-        public decimal June { get; set; }
-        public decimal July { get; set; }
-        public decimal August { get; set; }
-        public decimal September { get; set; }
-        public decimal October { get; set; }
-        public decimal November { get; set; }
-        public decimal December { get; set; }
+        public decimal January { get; set; } = 0;
+        public decimal February { get; set; } = 0;
+        public decimal March { get; set; } = 0;
+        public decimal April { get; set; } = 0;
+        public decimal May { get; set; } = 0;
+        public decimal June { get; set; } = 0;
+        public decimal July { get; set; } = 0;
+        public decimal August { get; set; } = 0;
+        public decimal September { get; set; } = 0;
+        public decimal October { get; set; } = 0;
+        public decimal November { get; set; } = 0;
+        public decimal December { get; set; } = 0;
+
+        public BugetPlanView() {}
 
         public BugetPlanView(BugetPlan bugetPlan) : base(bugetPlan)
         {

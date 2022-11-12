@@ -8,6 +8,7 @@ namespace Domain.ApiModel
     {
         public string Name { get; set; } = string.Empty;
 
+        public CompanyView() { }
         public CompanyView(Company company) : base(company) => this.Name = company.Name;
     }
 }
