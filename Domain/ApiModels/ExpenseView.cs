@@ -1,9 +1,12 @@
-﻿using Domain.Model;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.Json.Serialization;
+﻿using Domain.ApiModel;
+using Domain.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Domain.ApiModel
+namespace Domain.ApiModels
 {
     public class ExpenseView : BaseViewEntity
     {
@@ -13,7 +16,7 @@ namespace Domain.ApiModel
         public DateTime date { get; set; } = DateTime.Now;
         public decimal amount { get; set; } = 0;
 
-        public int expenseTypeId = 0;
+        public int expenseTypeId { get; set; } = 0;
 
         public ExpenseView() { }
         public ExpenseView(Expense expense) : base(expense)
@@ -22,6 +25,7 @@ namespace Domain.ApiModel
             this.Valid = expense.Valid;
             this.date = expense.date;
             this.amount = expense.amount;
+
             this.expenseTypeId = expense.ExpenseTypeId;
         }
     }

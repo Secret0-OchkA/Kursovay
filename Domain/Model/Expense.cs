@@ -1,4 +1,5 @@
 ﻿using Domain.ApiModel;
+using Domain.ApiModels;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
