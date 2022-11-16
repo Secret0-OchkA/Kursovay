@@ -93,13 +93,33 @@ namespace DockerTestBD.Api.Controllers
         /// <returns type="BugetPlanView"></returns>
         [ProducesResponseType(200, Type = typeof(BugetPlanView))]
         [ProducesErrorResponseType(typeof(string))]
-        [HttpGet("{bugetPlanId}", Name = "GetBugetPlan")]
+        [HttpGet("{bugetPlanId}", Name = "GetBugetPlanById")]
         public IActionResult Get(int companyId, int departmnetId, int bugetPlanId)
         {
             BugetPlan? bp = bugetPlans
                 .ByCompany(companyId)
                 .ByDepartment(departmnetId)
                 .GetObj(bugetPlanId);
+
+            if (bp == null) return BadRequest("not exist buget plan");
+
+            return Ok(BugetPlan.ToView(bp));
+        }
+        /// <summary>
+        /// get buget plan by department
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmnetId"></param>
+        /// <returns type="BugetPlanView"></returns>
+        [ProducesResponseType(200, Type = typeof(BugetPlanView))]
+        [ProducesErrorResponseType(typeof(string))]
+        [HttpGet(Name = "GetBugetPlan")]
+        public IActionResult Get(int companyId, int departmnetId)
+        {
+            BugetPlan? bp = bugetPlans
+                .ByCompany(companyId)
+                .ByDepartment(departmnetId)
+                .SingleOrDefault();
 
             if (bp == null) return BadRequest("not exist buget plan");
 
@@ -116,7 +136,7 @@ namespace DockerTestBD.Api.Controllers
         /// <returns>update bugetplan</returns>
         [ProducesResponseType(200, Type = typeof(BugetPlanView))]
         [ProducesErrorResponseType(typeof(string))]
-        [HttpPut("{bugetPlanId}", Name = "SetMonthBuget")]
+        [HttpPut("{bugetPlanId}/SetMonthBuget", Name = "SetMonthBuget")]
         public IActionResult SetMonthBuget(int companyId, int departmnetId, int bugetPlanId, [FromQuery] Month month, [FromQuery] decimal amount)
         {
             BugetPlan? bp = bugetPlans
@@ -147,7 +167,45 @@ namespace DockerTestBD.Api.Controllers
 
             bugetPlans.Update(bp);
             dbContext.SaveChanges();
-            return Ok(BugetPlan.ToView(bp));
+            return Ok();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="companyId"></param>
+        /// <param name="departmnetId"></param>
+        /// <param name="bugetPlanId"></param>
+        /// <param name="value"></param>
+        /// <returns>update bugetplan</returns>
+        [ProducesResponseType(200, Type = typeof(BugetPlanView))]
+        [ProducesErrorResponseType(typeof(string))]
+        [HttpPut("{bugetPlanId}", Name = "UpdateBugetPlan")]
+        public IActionResult UpdateBugetPlan(int companyId, int departmnetId, int bugetPlanId, [FromBody] BugetPlanView value)
+        {
+            BugetPlan? bp = bugetPlans
+               .ByCompany(companyId)
+               .ByDepartment(departmnetId)
+               .GetObj(bugetPlanId);
+
+            if (bp == null)
+                return BadRequest("not exist buget plan");
+
+            bp.January = value.January;
+            bp.February = value.February ;
+            bp.March = value.March;
+            bp.April = value.April;
+            bp.May = value.May;
+            bp.June = value.June;
+            bp.July = value.July;
+            bp.August = value.August;
+            bp.September = value.September;
+            bp.October = value.October;
+            bp.November = value.November;
+            bp.December = value.December;
+
+            bugetPlans.Update(bp);
+            dbContext.SaveChanges();
+            return Ok();
         }
     }
 

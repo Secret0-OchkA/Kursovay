@@ -17,6 +17,7 @@ namespace Domain.ApiModels
         public decimal amount { get; set; } = 0;
 
         public int expenseTypeId { get; set; } = 0;
+        public int employeeId { get; set; } = 0;
 
         public ExpenseView() { }
         public ExpenseView(Expense expense) : base(expense)
@@ -27,6 +28,7 @@ namespace Domain.ApiModels
             this.amount = expense.amount;
 
             this.expenseTypeId = expense.ExpenseTypeId;
+            this.employeeId = expense.EmploeeId;
         }
     }
 }

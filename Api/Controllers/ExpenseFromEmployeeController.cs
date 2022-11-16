@@ -48,6 +48,8 @@ namespace DockerTestBD.Api.Controllers
             Expense expense = new Expense
             {
                 expenseType = expenseType,
+                employee = employee,
+                EmploeeId = employee.Id,
                 amount = value.amount,
                 department = employee.Department,
                 date = DateTime.UtcNow,
