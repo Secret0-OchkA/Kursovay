@@ -41,9 +41,12 @@ namespace DockerTestBD.Api.Controllers
             Employee? employee = dbContext.employees.GetObj(employeeId);
             if (employee == null) return BadRequest("not exist employee");
             if (employee.Department == null) return BadRequest("employee not work in department");
+            if (employee.Department.budget < value.amount) return BadRequest("few department budget");
             ExpenseType? expenseType = dbContext.expenseTypes.GetObj(value.expenseTypeId);
             if (expenseType == null) return BadRequest("not exist expenseType");
             if (value.amount < 0 || value.amount > expenseType.Limit) return BadRequest("amout < 0 || amout > limit");
+
+            employee.Department.budget -= value.amount;
 
             Expense expense = new Expense
             {
@@ -55,6 +58,7 @@ namespace DockerTestBD.Api.Controllers
                 date = DateTime.UtcNow,
             };
             expenses.Add(expense);
+            dbContext.departments.Update(employee.Department);
             dbContext.SaveChanges();
             return Ok();
         }
@@ -98,9 +102,11 @@ namespace DockerTestBD.Api.Controllers
 
             if (expense == null) return BadRequest("not exist expense");
             if (expense.Valid == false) return BadRequest("expense not valid");
+            if (expense.department.budget < expense.amount) return BadRequest("few department budget");
 
             expense.Confirm = true;
 
+            dbContext.departments.Update(expense.department);
             expenses.Update(expense);
             dbContext.SaveChanges();
 

@@ -254,3 +254,33 @@ VALUES ('20221105193845_removeAuth', '6.0.10');
 
 COMMIT;
 
+START TRANSACTION;
+
+ALTER TABLE employees DROP CONSTRAINT "FK_employees_departments_DepartmentId";
+
+ALTER TABLE expenses DROP CONSTRAINT "FK_expenses_employees_employeeId";
+
+ALTER TABLE employees ADD CONSTRAINT "FK_employees_departments_DepartmentId" FOREIGN KEY ("DepartmentId") REFERENCES departments ("Id");
+
+ALTER TABLE expenses ADD CONSTRAINT "FK_expenses_employees_employeeId" FOREIGN KEY ("employeeId") REFERENCES employees ("Id");
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20221116142819_NoActionFK', '6.0.10');
+
+COMMIT;
+
+START TRANSACTION;
+
+ALTER TABLE employees DROP CONSTRAINT "FK_employees_departments_DepartmentId";
+
+ALTER TABLE expenses DROP CONSTRAINT "FK_expenses_employees_employeeId";
+
+ALTER TABLE employees ADD CONSTRAINT "FK_employees_departments_DepartmentId" FOREIGN KEY ("DepartmentId") REFERENCES departments ("Id") ON DELETE CASCADE;
+
+ALTER TABLE expenses ADD CONSTRAINT "FK_expenses_employees_employeeId" FOREIGN KEY ("employeeId") REFERENCES employees ("Id") ON DELETE CASCADE;
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20221116145108_NoActionFK2', '6.0.10');
+
+COMMIT;
+

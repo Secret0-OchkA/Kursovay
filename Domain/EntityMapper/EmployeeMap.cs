@@ -11,7 +11,7 @@ namespace Domain.EntityMapper
             builder.HasOne(e => e.Department)
                 .WithMany(d => d.employees)
                 .HasForeignKey(e => e.DepartmentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

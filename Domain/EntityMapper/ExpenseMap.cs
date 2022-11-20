@@ -14,7 +14,7 @@ namespace Domain.EntityMapper
 
             builder.HasOne(ex => ex.employee)
                 .WithMany(e => e.Expenses)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(ex => ex.expenseType)
                 .WithMany(ext => ext.Expenses)
