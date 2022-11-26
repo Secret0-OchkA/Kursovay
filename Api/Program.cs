@@ -1,8 +1,12 @@
+using App.Metrics;
+using App.Metrics.Extensions.Configuration;
 using Context;
 using DockerTestBD.Api;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Configuration;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,7 +36,24 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContextFactory<ApplicationDbContext, ApplicationDbContextFactory>();
 
+var configuratino = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
+
+var metricBuilder = new MetricsBuilder()
+    .Configuration.ReadFrom(configuratino)
+    .OutputMetrics.AsPrometheusPlainText();
+builder.Services.AddMetrics(metricBuilder);
+builder.Services.AddMetricsEndpoints(configuratino);
+builder.Services.AddMvcCore().AddMetricsCore();
+builder.Services.AddMetricsTrackingMiddleware(configuratino);
+
 var app = builder.Build();
+
+app.UseMetricsEndpoint();
+app.UseMetricsRequestTrackingMiddleware();
+app.UseMetricsAllEndpoints();
 
 app.UseCors(builder => {
     builder.AllowAnyOrigin();
@@ -45,6 +66,8 @@ if (app.Environment.IsDevelopment() || true)// remove "|| true" to be without sw
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
 app.UseCors(builder => builder.AllowAnyOrigin());
 
 app.UseAuthentication();
