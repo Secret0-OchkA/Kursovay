@@ -9,7 +9,16 @@
     <DockerServiceName>api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="caddy\Caddyfile" />
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="prometheus\alert.rules" />
+    <None Include="prometheus\prometheus.yml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="caddy\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="prometheus\**" />
   </ItemGroup>
 </Project>

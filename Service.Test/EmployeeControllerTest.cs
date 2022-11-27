@@ -1,40 +1,36 @@
 ﻿using Api.Test.Infrastructura;
-using Context;
 using DockerTestBD.Api.Controllers;
-using Domain.Model;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Service.Test
+namespace Api.Test
 {
-    internal class CompanyControllerTests
+    class EmployeeControllerTest
     {
         ApplicationDbContextTest dbContext;
-        CompanyController controller;
+        EmployeeController controller;
         [SetUp]
         public void Setup()
         {
             this.dbContext = new ApplicationDbContextFactory().CreateDbContext("Database");
-            controller = new CompanyController(dbContext);
+            controller = new EmployeeController(dbContext);
         }
 
         [Test]
-        public void GetById_Should_BadRequest_When_NotExistCompany()
+        public void GetById_Should_BadRequest_When_NotExistEmployee()
         {
             var result = controller.Get(-1);
             Assert.IsNotNull(result);
             Assert.That(result is BadRequestObjectResult);
         }
         [Test]
-        public void DeleteById_Should_BadRequest_When_NotExistCompany()
+        public void DeleteById_Should_BadRequest_When_NotExistEmployee()
         {
             var result = controller.Delete(-1);
-            Assert.IsNotNull(result);
-            Assert.That(result is BadRequestObjectResult);
-        }
-        [Test]
-        public void ChangeName_Should_BadRequest_When_NotExistCompany()
-        {
-            var result = controller.ChangeName(-1, "newName");
             Assert.IsNotNull(result);
             Assert.That(result is BadRequestObjectResult);
         }
